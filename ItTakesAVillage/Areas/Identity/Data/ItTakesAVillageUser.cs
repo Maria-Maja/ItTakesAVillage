@@ -11,7 +11,7 @@ public class ItTakesAVillageUser : IdentityUser
 {
     [PersonalData]
     public string FirstName { get; set; }
-    
+
     [PersonalData]
     public string LastName { get; set; }
 }
