@@ -1,0 +1,58 @@
+Frågor till Daniel
+
+
+Nya frågor 23/11-23
+
+•	vad gör vi med nullable warnings?
+•	hur ska vi tänka med closes?
+
+
+.....................................
+
+•	Ska vi tänka console eller webb? 
+o	Webbaplikation
+
+•	RazorPages? hur testar man då frontend? räcker det med att testa backend? 
+o	Ja, razor pages eller svelte.
+
+•	Vi behöver inte testa api, databas eller frontend.
+•	Testa klassen som ropar på apiet.
+Exempel på api: minimal api - kolla 
+
+•	Skapa en riktig databas eller bara mock? 
+o	Mock räcker för kursens del
+
+•	Vad tycker du om vi använder identity?
+o	Ja, Identity bland det bästa med .NET
+
+Prioriteringar
+1.	Applikationen
+2.	Userinlogg, okej med identity.
+Tänk såhär:
+Core features - 1vecka – 10 dagar
+Nice to have - 2-3 v
+Something in the future – skriv ner det på trello för att bli av med tanken och kunna jobba vidare.
+
+Hur delar vi upp frontend och backend?
+Räcker ett välfyllt api för att uppfylla cleancode och testning?
+
+
+
+......................................
+
+21/11-2023
+Leta upp id på kortet i trello
+
+integrera trello med github
+frpn tello till github och github till trello	power-ups
+
+okej att köra mvp först innan vi börjar testa.
+testdrivet vid andra sprinten, när man bestämt sig att det är en del av produkten och inte en prototyp
+Börja skapa databas direkt - lägg det i ett annat projekt använd EF
+
+
+Enkelt först! Hellre fungerande inbjudan till matlag på enklast möjliga sätt innan allt lullull
+
+clean arcitecture
+https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+uncle-bob
