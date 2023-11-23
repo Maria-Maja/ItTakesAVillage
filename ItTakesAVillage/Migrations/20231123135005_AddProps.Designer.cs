@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ItTakesAVillage.Migrations
 {
     [DbContext(typeof(ItTakesAVillageContext))]
-    [Migration("20231123130242_AddProperties")]
-    partial class AddProperties
+    [Migration("20231123135005_AddProps")]
+    partial class AddProps
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
