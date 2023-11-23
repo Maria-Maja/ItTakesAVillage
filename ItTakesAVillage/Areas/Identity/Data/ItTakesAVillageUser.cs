@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ItTakesAVillage.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace ItTakesAVillage.Areas.Identity.Data;
@@ -14,5 +15,8 @@ public class ItTakesAVillageUser : IdentityUser
 
     [PersonalData]
     public string LastName { get; set; }
+
+    public ICollection<UserGroup> UserGroups { get; set; }
+
 }
 
