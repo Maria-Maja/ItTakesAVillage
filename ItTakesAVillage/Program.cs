@@ -13,7 +13,7 @@ namespace ItTakesAVillage
 
             builder.Services.AddDbContext<ItTakesAVillageContext>(options => options.UseSqlServer(connectionString));
 
-            builder.Services.AddDefaultIdentity<ItTakesAVillageUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ItTakesAVillageContext>();
+            builder.Services.AddDefaultIdentity<ItTakesAVillageUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ItTakesAVillageContext>();
 
             // Add services to the container.
             builder.Services.AddRazorPages();
