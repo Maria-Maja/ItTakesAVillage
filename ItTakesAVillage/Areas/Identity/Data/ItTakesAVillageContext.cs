@@ -1,12 +1,17 @@
 ﻿using ItTakesAVillage.Areas.Identity.Data;
+using ItTakesAVillage.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace ItTakesAVillage.Data;
 
 public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
 {
+    public DbSet<Models.Group> Groups { get; set; }
+    public DbSet<UserGroup> UserGroups { get; set; }
+
     public ItTakesAVillageContext(DbContextOptions<ItTakesAVillageContext> options)
         : base(options)
     {

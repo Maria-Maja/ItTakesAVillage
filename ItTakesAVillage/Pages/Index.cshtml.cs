@@ -1,3 +1,5 @@
+using ItTakesAVillage.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -5,16 +7,18 @@ namespace ItTakesAVillage.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly UserManager<ItTakesAVillageUser> _userManager;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        public ItTakesAVillageUser MyUser { get; set; }
+        public IndexModel(UserManager<ItTakesAVillageUser> userManager)
         {
-            _logger = logger;
+            _userManager = userManager;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-
+            MyUser = await _userManager.GetUserAsync(User);
+            var id = MyUser.Id;
         }
     }
 }
