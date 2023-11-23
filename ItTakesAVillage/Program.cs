@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using ItTakesAVillage.Data;
+using ItTakesAVillage.Areas.Identity.Data;
 namespace ItTakesAVillage
 {
     public class Program
@@ -5,6 +9,11 @@ namespace ItTakesAVillage
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var connectionString = builder.Configuration.GetConnectionString("ItTakesAVillageContextConnection") ?? throw new InvalidOperationException("Connection string 'ItTakesAVillageContextConnection' not found.");
+
+            builder.Services.AddDbContext<ItTakesAVillageContext>(options => options.UseSqlServer(connectionString));
+
+            builder.Services.AddDefaultIdentity<ItTakesAVillageUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ItTakesAVillageContext>();
 
             // Add services to the container.
             builder.Services.AddRazorPages();
@@ -24,6 +33,7 @@ namespace ItTakesAVillage
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapRazorPages();
