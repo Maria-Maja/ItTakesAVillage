@@ -4,6 +4,7 @@ using ItTakesAVillage.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ItTakesAVillage.Migrations
 {
     [DbContext(typeof(ItTakesAVillageContext))]
-    partial class ItTakesAVillageContextModelSnapshot : ModelSnapshot
+    [Migration("20231124104522_SetPropsToNullable")]
+    partial class SetPropsToNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,53 +25,7 @@ namespace ItTakesAVillage.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ItTakesAVillage.Models.DinnerInvitation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Course")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DinnerInvitations");
-                });
-
-            modelBuilder.Entity("ItTakesAVillage.Models.Group", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("ItTakesAVillage.Models.ItTakesAVillageUser", b =>
+            modelBuilder.Entity("ItTakesAVillage.Areas.Identity.Data.ItTakesAVillageUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -139,6 +96,23 @@ namespace ItTakesAVillage.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("ItTakesAVillage.Models.Group", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("ItTakesAVillage.Models.UserGroup", b =>
@@ -310,7 +284,7 @@ namespace ItTakesAVillage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ItTakesAVillage.Models.ItTakesAVillageUser", "User")
+                    b.HasOne("ItTakesAVillage.Areas.Identity.Data.ItTakesAVillageUser", "User")
                         .WithMany("UserGroups")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -332,7 +306,7 @@ namespace ItTakesAVillage.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ItTakesAVillage.Models.ItTakesAVillageUser", null)
+                    b.HasOne("ItTakesAVillage.Areas.Identity.Data.ItTakesAVillageUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -341,7 +315,7 @@ namespace ItTakesAVillage.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ItTakesAVillage.Models.ItTakesAVillageUser", null)
+                    b.HasOne("ItTakesAVillage.Areas.Identity.Data.ItTakesAVillageUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -356,7 +330,7 @@ namespace ItTakesAVillage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ItTakesAVillage.Models.ItTakesAVillageUser", null)
+                    b.HasOne("ItTakesAVillage.Areas.Identity.Data.ItTakesAVillageUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -365,19 +339,19 @@ namespace ItTakesAVillage.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ItTakesAVillage.Models.ItTakesAVillageUser", null)
+                    b.HasOne("ItTakesAVillage.Areas.Identity.Data.ItTakesAVillageUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ItTakesAVillage.Models.Group", b =>
+            modelBuilder.Entity("ItTakesAVillage.Areas.Identity.Data.ItTakesAVillageUser", b =>
                 {
                     b.Navigation("UserGroups");
                 });
 
-            modelBuilder.Entity("ItTakesAVillage.Models.ItTakesAVillageUser", b =>
+            modelBuilder.Entity("ItTakesAVillage.Models.Group", b =>
                 {
                     b.Navigation("UserGroups");
                 });
