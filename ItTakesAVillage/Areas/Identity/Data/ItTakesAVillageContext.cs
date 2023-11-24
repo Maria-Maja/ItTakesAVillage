@@ -1,5 +1,4 @@
-﻿using ItTakesAVillage.Areas.Identity.Data;
-using ItTakesAVillage.Models;
+﻿using ItTakesAVillage.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +8,7 @@ namespace ItTakesAVillage.Data;
 
 public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
 {
+    public DbSet<Models.DinnerInvitation> DinnerInvitations { get; set; }
     public DbSet<Models.Group> Groups { get; set; }
     public DbSet<UserGroup> UserGroups { get; set; }
 

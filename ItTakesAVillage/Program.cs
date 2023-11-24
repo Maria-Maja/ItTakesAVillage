@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ItTakesAVillage.Data;
-using ItTakesAVillage.Areas.Identity.Data;
+using ItTakesAVillage.Models;
 namespace ItTakesAVillage
 {
     public class Program
