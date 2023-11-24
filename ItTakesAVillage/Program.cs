@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
+using ItTakesAVillage.Contracts;
+using ItTakesAVillage.Services;
 namespace ItTakesAVillage
 {
     public class Program
@@ -10,6 +12,9 @@ namespace ItTakesAVillage
         {
             var builder = WebApplication.CreateBuilder(args);
             var connectionString = builder.Configuration.GetConnectionString("ItTakesAVillageContextConnection") ?? throw new InvalidOperationException("Connection string 'ItTakesAVillageContextConnection' not found.");
+
+            builder.Services.AddScoped<IGroupService, GroupService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             builder.Services.AddDbContext<ItTakesAVillageContext>(options => options.UseSqlServer(connectionString));
 

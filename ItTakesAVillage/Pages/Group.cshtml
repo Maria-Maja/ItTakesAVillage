@@ -3,4 +3,15 @@
 @{
 
 }
-<h2>Här kan du skapa grupper</h2>
+
+@if (Model.CurrentUser != null)
+{
+    <form method="post" asp-page-handler="NewGroup">
+        <label>Ange namn på grupp</label>
+        <input asp-for="NewGroup.Name" />
+
+        <input type="submit" class="btn btn-primary" value="Spara" />
+    </form>
+}
+
+

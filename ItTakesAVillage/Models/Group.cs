@@ -6,5 +6,10 @@
         public string Name { get; set; } = string.Empty;
 
         public ICollection<UserGroup>? UserGroups { get; set; }
+
+        public Group()
+        {
+            
+        }
     }
 }
