@@ -53,7 +53,8 @@ namespace ItTakesAVillage.Services
                    GroupId = dinnerInvitation.GroupId,
                    DateTime = dinnerInvitation.DateTime,
                    Title = $"Matlag hos: {creator.FirstName} {creator.LastName}",
-                   IsRead = false
+                   IsRead = false,
+                   RelatedEvent = dinnerInvitation
                });
 
             await _context.SaveChangesAsync();
