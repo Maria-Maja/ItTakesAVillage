@@ -14,17 +14,22 @@ namespace ItTakesAVillage.Pages
         private readonly ItTakesAVillageContext _context;
         private readonly UserManager<ItTakesAVillageUser> _userManager;
         private readonly IDinnerInvitationService _dinnerInvitationService;
+        private readonly INotificationService _notificationService;
 
         [BindProperty]
         public DinnerInvitation NewInvitation { get; set; } = new DinnerInvitation();
 
         public ItTakesAVillageUser? CurrentUser { get; set; }
 
-        public DinnerInvitationModel(ItTakesAVillageContext context, IDinnerInvitationService dinnerInvitationService, UserManager<ItTakesAVillageUser> userManager)
+        public DinnerInvitationModel(ItTakesAVillageContext context, 
+            IDinnerInvitationService dinnerInvitationService, 
+            UserManager<ItTakesAVillageUser> userManager,
+            INotificationService notificationService)
         {
             _context = context;
             _dinnerInvitationService = dinnerInvitationService;
             _userManager = userManager;
+            _notificationService = notificationService;
         }
 
         public async Task<IActionResult> OnGet()
@@ -43,6 +48,8 @@ namespace ItTakesAVillage.Pages
                 {
                     NewInvitation.UserId = CurrentUser.Id;
                     await _dinnerInvitationService.CreateDinnerInvitation(NewInvitation);
+                    //TODO Om ovan lyckas, ska en notification skickas till alla i gruppen
+                    await _notificationService.SendDinnerNotificationToGroup(NewInvitation);
                 }
             }
             return RedirectToPage("/DinnerInvitation");

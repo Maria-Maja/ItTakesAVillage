@@ -16,6 +16,7 @@ namespace ItTakesAVillage
             builder.Services.AddScoped<IGroupService, GroupService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IDinnerInvitationService, DinnerInvitationService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
 
             builder.Services.AddDbContext<ItTakesAVillageContext>(options => options.UseSqlServer(connectionString));
 

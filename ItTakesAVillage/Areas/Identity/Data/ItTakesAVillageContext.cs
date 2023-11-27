@@ -11,6 +11,7 @@ public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
     public DbSet<Models.DinnerInvitation> DinnerInvitations { get; set; }
     public DbSet<Models.Group> Groups { get; set; }
     public DbSet<UserGroup> UserGroups { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
 
     public ItTakesAVillageContext(DbContextOptions<ItTakesAVillageContext> options)
         : base(options)
