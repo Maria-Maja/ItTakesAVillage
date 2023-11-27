@@ -2,3 +2,20 @@
 @model ItTakesAVillage.Pages.DinnerInvitationModel
 @{
 }
+
+@if (Model.CurrentUser != null)
+{
+    <form method="post">
+        <label class="form-label">Skapa ny matlagsinbjudan</label>
+        <select class="form-control w-25" asp-for="NewInvitation.GroupId" asp-items="ViewBag.GroupId">
+            <option disabled selected>Välj grupp</option>
+        </select>
+        <label class="form-label">Vad ska du bjuda på?</label>
+        <input class="form-control" asp-for="NewInvitation.Course" />
+        <label class="form-label">Vilket datum?</label>
+        <input class="form-control" asp-for="NewInvitation.DateTime" value="@DateTime.Now.ToString("yyyy-MM-dd hh:mm")"/>
+        <label class="form-label">Var ska ni vara?</label>
+        <input class="form-control" asp-for="NewInvitation.Location" />
+        <input type="submit" class="btn btn-primary" value="Spara" />
+    </form>
+}

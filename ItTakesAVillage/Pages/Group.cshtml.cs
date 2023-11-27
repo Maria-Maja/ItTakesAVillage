@@ -16,13 +16,12 @@ namespace ItTakesAVillage.Pages
         private readonly UserManager<ItTakesAVillageUser> _userManager;
         private readonly ItTakesAVillageContext _context;
 
-        //[BindProperty]
-        public ItTakesAVillageUser CurrentUser { get; set; }
+        public ItTakesAVillageUser? CurrentUser { get; set; }
         [BindProperty]
         public Models.Group NewGroup { get; set; } = new Models.Group();
-        
+
         [BindProperty]
-        public Models.UserGroup NewUserGroup { get; set; } = new Models.UserGroup();
+        public UserGroup NewUserGroup { get; set; } = new UserGroup();
 
         public GroupModel(IGroupService groupService, IUserService userService, UserManager<ItTakesAVillageUser> userManager, ItTakesAVillageContext context)
         {
@@ -46,7 +45,7 @@ namespace ItTakesAVillage.Pages
             {
                 CurrentUser = await _userManager.GetUserAsync(User);
                 var newGroupId = await _groupService.SaveGroup(NewGroup);
-                if (newGroupId != 0 && CurrentUser.Id != null)
+                if (CurrentUser != null && newGroupId != 0)
                 {
                     await _groupService.AddUserToGroup(CurrentUser.Id, newGroupId);
                 }
