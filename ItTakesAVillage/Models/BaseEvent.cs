@@ -1,13 +1,11 @@
 ﻿namespace ItTakesAVillage.Models
 {
-    public class Notification
+    public class BaseEvent
     {
         public int Id { get; set; }
         public string UserId { get; set; } = string.Empty;
         public int GroupId { get; set; }
         public DateTime DateTime { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public bool IsRead { get; set; }
-        public BaseEvent RelatedEvent { get; set; } = new BaseEvent();
+        public string? Message { get; set; }
     }
 }

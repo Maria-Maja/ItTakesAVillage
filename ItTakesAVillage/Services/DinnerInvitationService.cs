@@ -14,7 +14,7 @@ namespace ItTakesAVillage.Services
         }
         public async Task CreateDinnerInvitation(DinnerInvitation invitation)
         {
-            await _context.DinnerInvitations.AddAsync(invitation);
+            await _context.Events.AddAsync(invitation);
             await _context.SaveChangesAsync();
         }
     }

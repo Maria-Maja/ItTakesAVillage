@@ -11,9 +11,11 @@ namespace ItTakesAVillage.Pages
     {
         private readonly UserManager<ItTakesAVillageUser> _userManager;
         private readonly INotificationService _notificationService;
+      
 
         public ItTakesAVillageUser? CurrentUser { get; set; }
         public List<Notification> Notifications { get; set; } = new List<Notification>();
+        public DinnerInvitation DinnerInvitation { get; set; }
         public NotificationModel(UserManager<ItTakesAVillageUser> userManager, INotificationService notificationService)
         {
             _userManager = userManager;

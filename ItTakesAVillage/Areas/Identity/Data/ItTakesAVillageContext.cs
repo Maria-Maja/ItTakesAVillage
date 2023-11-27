@@ -8,6 +8,7 @@ namespace ItTakesAVillage.Data;
 
 public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
 {
+    public DbSet<Models.BaseEvent> Events { get; set; }
     public DbSet<Models.DinnerInvitation> DinnerInvitations { get; set; }
     public DbSet<Models.Group> Groups { get; set; }
     public DbSet<UserGroup> UserGroups { get; set; }
@@ -21,8 +22,10 @@ public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        // Customize the ASP.NET Identity model and override the defaults if needed.
-        // For example, you can rename the ASP.NET Identity table names and more.
-        // Add your customizations after calling base.OnModelCreating(builder);
+
+        builder.Entity<Models.BaseEvent>().ToTable("Events");
+        builder.Entity<Models.DinnerInvitation>().ToTable("Events");
+
+
     }
 }
