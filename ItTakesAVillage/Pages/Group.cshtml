@@ -7,10 +7,23 @@
 @if (Model.CurrentUser != null)
 {
     <form method="post" asp-page-handler="NewGroup">
-        <label>Ange namn på grupp</label>
-        <input asp-for="NewGroup.Name" />
+        <label class="form-label">Ange namn på grupp</label>
+        <input class="form-control w-25" asp-for="NewGroup.Name" />
 
         <input type="submit" class="btn btn-primary" value="Spara" />
+    </form>
+
+    <form method="post" asp-page-handler="AddUserToGroup">
+        <label class="form-label">Lägg till medlem i grupp</label>
+        <select class="form-control w-25" asp-for="NewUserGroup.GroupId" asp-items="ViewBag.GroupId">
+            <option disabled selected>Välj grupp</option>
+        </select>
+        <select class="form-control w-25" asp-for="NewUserGroup.UserId" asp-items="ViewBag.UserId">
+            <option disabled selected>Välj medlem</option>
+        </select>
+        <input type="submit" class="btn btn-primary" value="Spara" />
+
+
     </form>
 }
 
