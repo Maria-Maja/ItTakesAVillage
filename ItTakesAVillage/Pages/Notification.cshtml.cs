@@ -14,9 +14,11 @@ namespace ItTakesAVillage.Pages
         private readonly IDinnerInvitationService _dinnerInvitationService;
 
         public ItTakesAVillageUser? CurrentUser { get; set; }
+        [BindProperty]
+        public Notification? Notification { get; set; }
         public List<Notification> Notifications { get; set; } = new();
         public List<DinnerInvitation> DinnerInvitations { get; set; } = new();
-        public NotificationModel(UserManager<ItTakesAVillageUser> userManager, 
+        public NotificationModel(UserManager<ItTakesAVillageUser> userManager,
             INotificationService notificationService,
             IDinnerInvitationService dinnerInvitationService)
         {
@@ -24,7 +26,7 @@ namespace ItTakesAVillage.Pages
             _notificationService = notificationService;
             _dinnerInvitationService = dinnerInvitationService;
         }
-        public async Task<IActionResult> OnGetAsync(int changeId)
+        public async Task<IActionResult> OnGetAsync()
         {
             CurrentUser = await _userManager.GetUserAsync(User);
             DinnerInvitations = await _dinnerInvitationService.GetAll();
@@ -32,11 +34,16 @@ namespace ItTakesAVillage.Pages
             if (CurrentUser != null)
                 Notifications = await _notificationService.GetAllByUserId(CurrentUser.Id);
 
-            if (changeId != 0)
-            {
-                await _notificationService.UpdateIsRead(changeId);
-            }
+
             return Page();
+        }
+        public async Task<IActionResult> OnPostHandleAccordionClick()
+        {
+            if (Notification.Id != 0)
+            {
+                await _notificationService.UpdateIsRead(Notification.Id);
+            }
+            return RedirectToPage("/Notification");
         }
     }
 }

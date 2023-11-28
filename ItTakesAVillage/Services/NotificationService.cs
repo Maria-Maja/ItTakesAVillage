@@ -64,8 +64,6 @@ namespace ItTakesAVillage.Services
             
             if(existingNotification != null)
             {
-                existingNotification.UserId = existingNotification.UserId;
-                existingNotification.Title = existingNotification.Title;
                 existingNotification.IsRead = true;
 
                 await _context.SaveChangesAsync();
