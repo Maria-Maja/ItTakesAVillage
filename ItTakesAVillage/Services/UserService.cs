@@ -13,10 +13,8 @@ namespace ItTakesAVillage.Services
         {
             _context = context;
         }
-        public async Task<ItTakesAVillageUser> GetUserById(string userId)
-        {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
-            //TODO: Fixa nullvarning
-        }
+        //TODO: Fixa nullvarning
+        public async Task<ItTakesAVillageUser> GetUserById(string userId) => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+
     }
 }
