@@ -1,6 +1,7 @@
 using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
+using ItTakesAVillage.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,30 +12,29 @@ namespace ItTakesAVillage.Pages
 {
     public class DinnerInvitationModel : PageModel
     {
-        private readonly ItTakesAVillageContext _context;
         private readonly UserManager<ItTakesAVillageUser> _userManager;
         private readonly IDinnerInvitationService _dinnerInvitationService;
         private readonly INotificationService _notificationService;
+        private readonly IGroupService _groupService;
 
         [BindProperty]
         public DinnerInvitation NewInvitation { get; set; } = new DinnerInvitation();
-
         public ItTakesAVillageUser? CurrentUser { get; set; }
 
-        public DinnerInvitationModel(ItTakesAVillageContext context, 
-            IDinnerInvitationService dinnerInvitationService, 
+        public DinnerInvitationModel(IDinnerInvitationService dinnerInvitationService, 
             UserManager<ItTakesAVillageUser> userManager,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IGroupService groupService)
         {
-            _context = context;
             _dinnerInvitationService = dinnerInvitationService;
             _userManager = userManager;
             _notificationService = notificationService;
+            _groupService = groupService;
         }
 
         public async Task<IActionResult> OnGet()
         {
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name");
+            ViewData["GroupId"] = new SelectList(await _groupService.GetAll(), "Id", "Name");
             CurrentUser = await _userManager.GetUserAsync(User);
             return Page();
         }
@@ -46,10 +46,10 @@ namespace ItTakesAVillage.Pages
                 CurrentUser = await _userManager.GetUserAsync(User);
                 if (CurrentUser != null)
                 {
-                    NewInvitation.UserId = CurrentUser.Id;
-                    await _dinnerInvitationService.CreateDinnerInvitation(NewInvitation);
+                    NewInvitation.CreatorId = CurrentUser.Id;
+                    await _dinnerInvitationService.Create(NewInvitation);
                     //TODO Om ovan lyckas, ska en notification skickas till alla i gruppen
-                    await _notificationService.SendDinnerNotificationToGroup(NewInvitation);
+                    await _notificationService.NotifyGroup(NewInvitation);
                 }
             }
             return RedirectToPage("/DinnerInvitation");

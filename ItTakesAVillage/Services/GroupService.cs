@@ -13,7 +13,13 @@ namespace ItTakesAVillage.Services
         {
             _context = context;
         }
-        public async Task<int> SaveGroup(Group group)
+
+        public async Task<List<Group>> GetAll()
+        {
+            return await _context.Groups.ToListAsync();
+        }
+
+        public async Task<int> Save(Group group)
         {
             await _context.Groups.AddAsync(group);
             await _context.SaveChangesAsync();
@@ -21,7 +27,7 @@ namespace ItTakesAVillage.Services
             return group.Id;
         }      
 
-        public async Task AddUserToGroup(string userId, int groupId)
+        public async Task AddUser(string userId, int groupId)
         {
             var userGroup = new UserGroup
             {
@@ -33,7 +39,7 @@ namespace ItTakesAVillage.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<ItTakesAVillageUser?>> GetGroupMembersByGroupId(int groupId)
+        public async Task<List<ItTakesAVillageUser?>> GetMembers(int groupId)
         {
             var groupMembers = await _context.UserGroups
                 .Where(x => x.GroupId == groupId)

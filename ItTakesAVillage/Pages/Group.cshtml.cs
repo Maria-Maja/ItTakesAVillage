@@ -12,30 +12,27 @@ namespace ItTakesAVillage.Pages
     public class GroupModel : PageModel
     {
         private readonly IGroupService _groupService;
-        private readonly IUserService _userService;
         private readonly UserManager<ItTakesAVillageUser> _userManager;
-        private readonly ItTakesAVillageContext _context;
 
         public ItTakesAVillageUser? CurrentUser { get; set; }
+
         [BindProperty]
         public Models.Group NewGroup { get; set; } = new Models.Group();
 
         [BindProperty]
         public UserGroup NewUserGroup { get; set; } = new UserGroup();
 
-        public GroupModel(IGroupService groupService, IUserService userService, UserManager<ItTakesAVillageUser> userManager, ItTakesAVillageContext context)
+        public GroupModel(IGroupService groupService, UserManager<ItTakesAVillageUser> userManager)
         {
             _groupService = groupService;
             _userManager = userManager;
-            _userService = userService;
-            _context = context;
         }
 
         public async Task<IActionResult> OnGet()
         {
             CurrentUser = await _userManager.GetUserAsync(User);
             ViewData["UserId"] = new SelectList(_userManager.Users, "Id", "Email");
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name");
+            ViewData["GroupId"] = new SelectList(await _groupService.GetAll(), "Id", "Name");
             return Page();
         }
 
@@ -44,10 +41,10 @@ namespace ItTakesAVillage.Pages
             if (ModelState.IsValid)
             {
                 CurrentUser = await _userManager.GetUserAsync(User);
-                var newGroupId = await _groupService.SaveGroup(NewGroup);
+                var newGroupId = await _groupService.Save(NewGroup);
                 if (CurrentUser != null && newGroupId != 0)
                 {
-                    await _groupService.AddUserToGroup(CurrentUser.Id, newGroupId);
+                    await _groupService.AddUser(CurrentUser.Id, newGroupId);
                 }
             }
             return RedirectToPage("/Group");
@@ -57,7 +54,7 @@ namespace ItTakesAVillage.Pages
         {
             if (ModelState.IsValid)
             {
-                await _groupService.AddUserToGroup(NewUserGroup.UserId, NewUserGroup.GroupId);
+                await _groupService.AddUser(NewUserGroup.UserId, NewUserGroup.GroupId);
             }
             return RedirectToPage("/Group");
         }

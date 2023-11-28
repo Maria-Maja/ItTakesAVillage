@@ -14,7 +14,7 @@ namespace ItTakesAVillage.Services
             _context = context;
         }
         //TODO: Fixa nullvarning
-        public async Task<ItTakesAVillageUser> GetUserById(string userId) => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        public async Task<ItTakesAVillageUser> GetById(string userId) => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
     }
 }

@@ -22,37 +22,35 @@ namespace ItTakesAVillage.Services
             _context = context;
         }
 
-        public async Task<List<Notification>> GetAllNotificationsByUserId(string userId) =>  await _context.Notifications.Where(x => x.UserId == userId).ToListAsync();
-        private async Task<Notification> GetNotificationById(int notificationId) => await _context.Notifications.FirstOrDefaultAsync(x => x.Id == notificationId);
+        public async Task<List<Notification>> GetAllByUserId(string userId) =>  await _context.Notifications.Where(x => x.UserId == userId).ToListAsync();
+        private async Task<Notification> GetOneById(int notificationId) => await _context.Notifications.FirstOrDefaultAsync(x => x.Id == notificationId); //TODO nullchecka metod
 
-        public async Task<int> GetAmountOfUnreadNotifications(string userId)
+        public async Task<int> Count(string userId)
         {
-            var result = await GetAllNotificationsByUserId(userId);
+            var result = await GetAllByUserId(userId);
             return result.Where(x => x.IsRead == false).Count();
         }
 
-        public async Task SendDinnerNotificationToGroup(DinnerInvitation dinnerInvitation)
+        public async Task NotifyGroup(DinnerInvitation dinnerInvitation)
         {
-            var groupMembers = await _groupService.GetGroupMembersByGroupId(dinnerInvitation.GroupId);
+            var groupMembers = await _groupService.GetMembers(dinnerInvitation.GroupId);
             if (!groupMembers.IsNullOrEmpty())
             {
                 foreach (var member in groupMembers)
                 {
-                    await CreateDinnerNotification(dinnerInvitation, member.Id);
+                    await Create(dinnerInvitation, member.Id); //TODO nullchecka member.id
                 }
             }
         }
 
-        private async Task CreateDinnerNotification(DinnerInvitation dinnerInvitation, string userId)
+        private async Task Create(DinnerInvitation dinnerInvitation, string userId)
         {
-            var creator = await _userService.GetUserById(dinnerInvitation.UserId);
+            var creator = await _userService.GetById(dinnerInvitation.CreatorId);
             _context.Notifications.Add
                (new Notification
                {
                    UserId = userId,
-                   GroupId = dinnerInvitation.GroupId,
-                   DateTime = dinnerInvitation.DateTime,
-                   Title = $"Matlag hos: {creator.FirstName} {creator.LastName}",
+                   Title = $"Matlag hos {creator.FirstName} {creator.LastName}",
                    IsRead = false,
                    RelatedEvent = dinnerInvitation
                });
@@ -60,16 +58,14 @@ namespace ItTakesAVillage.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateNotificationIsRead(Notification notification)
+        public async Task UpdateIsRead(int notificationId)
         {
-            var existingNotification = await GetNotificationById(notification.Id); 
+            var existingNotification = await GetOneById(notificationId); 
             
             if(existingNotification != null)
             {
-                existingNotification.UserId = notification.UserId;
-                existingNotification.GroupId = notification.GroupId;
-                existingNotification.DateTime = notification.DateTime;
-                existingNotification.Title = notification.Title;
+                existingNotification.UserId = existingNotification.UserId;
+                existingNotification.Title = existingNotification.Title;
                 existingNotification.IsRead = true;
 
                 await _context.SaveChangesAsync();

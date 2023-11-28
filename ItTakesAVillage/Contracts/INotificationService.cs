@@ -5,9 +5,9 @@ namespace ItTakesAVillage.Contracts
 {
     public interface INotificationService
     {
-        Task SendDinnerNotificationToGroup(DinnerInvitation dinnerInvitation);
-        Task<int> GetAmountOfUnreadNotifications(string userId);
-        Task<List<Notification>> GetAllNotificationsByUserId(string userId);
-        Task UpdateNotificationIsRead(Notification notification);
+        Task NotifyGroup(DinnerInvitation dinnerInvitation);
+        Task<int> Count(string userId);
+        Task<List<Notification>> GetAllByUserId(string userId);
+        Task UpdateIsRead(int notificationId);
     }
 }

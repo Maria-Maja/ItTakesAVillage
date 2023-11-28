@@ -7,14 +7,12 @@
 @inject INotificationService notificationService
 @{
     var user = await UserManager.GetUserAsync(User);
-
-
-
 }
+
 <ul class="navbar-nav">
     @if (user != null)
     {
-        int unreadNotifications = await notificationService.GetAmountOfUnreadNotifications(user.Id);
+        int unreadNotifications = await notificationService.Count(user.Id);
 
         <li class="nav-item">
             <a class="nav-link text-dark" asp-page="/Notification">
