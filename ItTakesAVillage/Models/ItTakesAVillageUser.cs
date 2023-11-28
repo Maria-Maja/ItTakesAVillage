@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ItTakesAVillage.Models;
 
-// Add profile data for application users by adding properties to the ItTakesAVillageUser class
 public class ItTakesAVillageUser : IdentityUser
 {
     [PersonalData]

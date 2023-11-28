@@ -4,6 +4,7 @@ using ItTakesAVillage.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ItTakesAVillage.Migrations
 {
     [DbContext(typeof(ItTakesAVillageContext))]
-    partial class ItTakesAVillageContextModelSnapshot : ModelSnapshot
+    [Migration("20231127123731_AddNotifications")]
+    partial class AddNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace ItTakesAVillage.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ItTakesAVillage.Models.BaseEvent", b =>
+            modelBuilder.Entity("ItTakesAVillage.Models.DinnerInvitation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,33 +33,28 @@ namespace ItTakesAVillage.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreatorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Course")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EventType")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId");
-
-                    b.ToTable("Events", (string)null);
-
-                    b.HasDiscriminator<string>("EventType").HasValue("BaseEvent");
-
-                    b.UseTphMappingStrategy();
+                    b.ToTable("DinnerInvitations");
                 });
 
             modelBuilder.Entity("ItTakesAVillage.Models.Group", b =>
@@ -157,11 +155,14 @@ namespace ItTakesAVillage.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
-
-                    b.Property<int>("RelatedEventId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -172,8 +173,6 @@ namespace ItTakesAVillage.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RelatedEventId");
 
                     b.ToTable("Notifications");
                 });
@@ -337,41 +336,6 @@ namespace ItTakesAVillage.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("ItTakesAVillage.Models.DinnerInvitation", b =>
-                {
-                    b.HasBaseType("ItTakesAVillage.Models.BaseEvent");
-
-                    b.Property<string>("Course")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("DinnerInvitation");
-                });
-
-            modelBuilder.Entity("ItTakesAVillage.Models.BaseEvent", b =>
-                {
-                    b.HasOne("ItTakesAVillage.Models.ItTakesAVillageUser", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
-                });
-
-            modelBuilder.Entity("ItTakesAVillage.Models.Notification", b =>
-                {
-                    b.HasOne("ItTakesAVillage.Models.BaseEvent", "RelatedEvent")
-                        .WithMany()
-                        .HasForeignKey("RelatedEventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RelatedEvent");
                 });
 
             modelBuilder.Entity("ItTakesAVillage.Models.UserGroup", b =>

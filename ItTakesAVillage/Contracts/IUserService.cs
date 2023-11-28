@@ -4,6 +4,6 @@ namespace ItTakesAVillage.Contracts
 {
     public interface IUserService
     {
-        ItTakesAVillageUser GetUserByUserName(string userName);
+        Task<ItTakesAVillageUser> GetById(string userName);
     }
 }

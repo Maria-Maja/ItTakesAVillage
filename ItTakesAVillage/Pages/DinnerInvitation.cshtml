@@ -13,9 +13,11 @@
         <label class="form-label">Vad ska du bjuda på?</label>
         <input class="form-control" asp-for="NewInvitation.Course" />
         <label class="form-label">Vilket datum?</label>
-        <input class="form-control" asp-for="NewInvitation.DateTime" value="@DateTime.Now.ToString("yyyy-MM-dd hh:mm")"/>
+        <input class="form-control" asp-for="NewInvitation.DateTime" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm", new System.Globalization.CultureInfo("sv-SE"))" />
         <label class="form-label">Var ska ni vara?</label>
         <input class="form-control" asp-for="NewInvitation.Location" />
+        <label class="form-label">Övrig information</label>
+        <textarea class="form-control" asp-for="NewInvitation.Message"></textarea>
         <input type="submit" class="btn btn-primary" value="Spara" />
     </form>
 }

@@ -4,6 +4,7 @@ namespace ItTakesAVillage.Contracts
 {
     public interface IDinnerInvitationService
     {
-        Task CreateDinnerInvitation(DinnerInvitation invitation);
+        Task Create(DinnerInvitation invitation);
+        Task<List<DinnerInvitation>> GetAll();
     }
 }

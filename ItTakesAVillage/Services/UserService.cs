@@ -1,6 +1,7 @@
 ﻿using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ItTakesAVillage.Services
 {
@@ -12,10 +13,8 @@ namespace ItTakesAVillage.Services
         {
             _context = context;
         }
-        public ItTakesAVillageUser GetUserByUserName(string userName)
-        {
-            return _context.Users.FirstOrDefault(x => x.UserName == userName);
-            //TODO: Fixa nullvarning
-        }
+        //TODO: Fixa nullvarning
+        public async Task<ItTakesAVillageUser> GetById(string userId) => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+
     }
 }
