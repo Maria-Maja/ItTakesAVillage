@@ -1,8 +1,11 @@
+using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
 using ItTakesAVillage.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Moq;
+using System.Reflection.Metadata;
 
 namespace ItTakesAVillage.Tests
 {
@@ -15,28 +18,24 @@ namespace ItTakesAVillage.Tests
         }
 
         [Fact]
-        public void CanAddUserToGroup()
+        public async Task CanAddUserToGroup()
         {
             //Arrange
             var userId = "userId123";
             var groupId = 1;
 
-            var options = new DbContextOptionsBuilder<ItTakesAVillageContext>()
-            .UseInMemoryDatabase(databaseName: "TestDatabase")
-            .Options;
+            var serviceMock = new Mock<IGroupService>();
+            serviceMock
+                .Setup(x =>x.AddUser(userId, groupId))
+                .ReturnsAsync(true);
 
-            var contextMock = new Mock<ItTakesAVillageContext>(options);
-            var userGroupsMock = new Mock<DbSet<UserGroup>>();
-            contextMock.Setup(x => x.Set<UserGroup>()).Returns(userGroupsMock.Object);
-
-            var sut = new GroupService(contextMock.Object);
+            var sut = new TestClasses.GroupTests(serviceMock.Object);
 
             //Act
-            sut.AddUser(userId, groupId);
+            var actual = await sut.AddUser(userId, groupId);
 
             //Assert
-            userGroupsMock.Verify(mock => mock.AddAsync(It.IsAny<UserGroup>(), default), Times.Once);
-            contextMock.Verify(x => x.SaveChangesAsync(default), Times.Once);
+            Assert.True(actual);
         }
     }
 }

@@ -25,18 +25,26 @@ namespace ItTakesAVillage.Services
             await _context.SaveChangesAsync();
 
             return group.Id;
-        }      
+        }
 
-        public async Task AddUser(string userId, int groupId)
+        public async Task<bool> AddUser(string userId, int groupId)
         {
-            var userGroup = new UserGroup
+            try
             {
-                UserId = userId,
-                GroupId = groupId
-            };
+                var userGroup = new UserGroup
+                {
+                    UserId = userId,
+                    GroupId = groupId
+                };
 
-            await _context.UserGroups.AddAsync(userGroup);
-            await _context.SaveChangesAsync();
+                await _context.UserGroups.AddAsync(userGroup);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {                
+                return false;
+            }
         }
 
         public async Task<List<ItTakesAVillageUser?>> GetMembers(int groupId)
