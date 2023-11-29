@@ -1,40 +1,39 @@
 ﻿using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
+using ItTakesAVillage.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace ItTakesAVillage.Services
 {
     public class GroupService : IGroupService
     {
-        private readonly IItTakesAVillageContext _context;
-        private readonly IUserService _userService;
+        private readonly IGroupRepository _groupRepository;
+        private readonly IUserRepository _userRepository;
 
-        public GroupService(IItTakesAVillageContext context, IUserService userService)
+        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository)
         {
-            _context = context;
-            _userService = userService;
+            _groupRepository = groupRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<List<Group>> GetAll()
         {
-            return await _context.Groups.ToListAsync();
+            return await _groupRepository.GetAllGroupsAsync();
         }
-
-        public IQueryable<UserGroup> GetAllUserGroups() => _context.UserGroups;
 
         public async Task<int> Save(Group group)
         {
-            await _context.Groups.AddAsync(group);
-            await _context.SaveChangesAsync();
+            await _groupRepository.AddGroupAsync(group);
+            await _groupRepository.SaveChangesAsync();
 
             return group.Id;
         }
 
         public async Task<bool> AddUser(string userId, int groupId)
         {
-            var user = await _userService.GetById(userId);
-            var usergroups = GetAllUserGroups().ToListAsync();
+            var user = await _userRepository.GetByIdAsync(userId);
+            var usergroups = await _groupRepository.GetUserGroupsAsync();
 
             bool userExistsInList = usergroups.Any(x => x.UserId == user.Id);
 
@@ -49,17 +48,18 @@ namespace ItTakesAVillage.Services
                 GroupId = groupId
             };
 
-            await _context.UserGroups.AddAsync(userGroup);
-            await _context.SaveChangesAsync();
+            await _groupRepository.AddUserToGroupAsync(userGroup);
+            await _groupRepository.SaveChangesAsync();
+
             return true;
         }
 
         public async Task<List<ItTakesAVillageUser?>> GetMembers(int groupId)
         {
-            var groupMembers = await _context.UserGroups
+            var userGroups = await _groupRepository.GetUserGroupsAsync();
+            var groupMembers = userGroups
                 .Where(x => x.GroupId == groupId)
-                .Select(x => x.User)
-                .ToListAsync();
+                .Select(x => x.User).ToList();
 
             return groupMembers;
         }

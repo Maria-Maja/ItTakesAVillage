@@ -3,18 +3,18 @@ using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ItTakesAVillage.Services
+namespace ItTakesAVillage.Repository
 {
-    public class UserService : IUserService
+    public class UserRepository : IUserRepository
     {
         private readonly ItTakesAVillageContext _context;
 
-        public UserService(ItTakesAVillageContext context)
+        public UserRepository(ItTakesAVillageContext context)
         {
             _context = context;
         }
         //TODO: Fixa nullvarning
-        public async Task<ItTakesAVillageUser> GetById(string userId) => await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+        public async Task<ItTakesAVillageUser> GetByIdAsync(string userId) => await _context.Users.FindAsync(userId);
 
     }
 }

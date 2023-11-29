@@ -1,6 +1,7 @@
 ﻿using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
+using ItTakesAVillage.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
@@ -10,15 +11,15 @@ namespace ItTakesAVillage.Services
     public class NotificationService : INotificationService
     {
         private readonly IGroupService _groupService;
+        private readonly IUserRepository _userRepository;
         private readonly ItTakesAVillageContext _context;
-        private readonly IUserService _userService;
 
         public NotificationService(IGroupService groupService,
             ItTakesAVillageContext context,
-            IUserService userService)
+            IUserRepository userRepository)
         {
             _groupService = groupService;
-            _userService = userService;
+            _userRepository = userRepository;
             _context = context;
         }
 
@@ -45,7 +46,7 @@ namespace ItTakesAVillage.Services
 
         private async Task Create(DinnerInvitation dinnerInvitation, string userId)
         {
-            var creator = await _userService.GetById(dinnerInvitation.CreatorId);
+            var creator = await _userRepository.GetByIdAsync(dinnerInvitation.CreatorId);
             _context.Notifications.Add
                (new Notification
                {

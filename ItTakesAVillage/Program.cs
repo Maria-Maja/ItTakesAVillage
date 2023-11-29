@@ -4,6 +4,7 @@ using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
 using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Services;
+using ItTakesAVillage.Repository;
 namespace ItTakesAVillage
 {
     public class Program
@@ -14,7 +15,7 @@ namespace ItTakesAVillage
             var connectionString = builder.Configuration.GetConnectionString("ItTakesAVillageContextConnection") ?? throw new InvalidOperationException("Connection string 'ItTakesAVillageContextConnection' not found.");
 
             builder.Services.AddScoped<IGroupService, GroupService>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IDinnerInvitationService, DinnerInvitationService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
 

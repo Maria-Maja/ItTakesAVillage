@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace ItTakesAVillage.Data;
 
-public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>, IItTakesAVillageContext
+public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
 {
     public DbSet<Models.BaseEvent> Events { get; set; }
     //public DbSet<Models.DinnerInvitation> DinnerInvitations { get; set; }

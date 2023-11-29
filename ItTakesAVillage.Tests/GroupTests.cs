@@ -2,7 +2,6 @@ using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
 using ItTakesAVillage.Services;
-using ItTakesAVillage.TestClasses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Moq;
@@ -13,99 +12,56 @@ namespace ItTakesAVillage.Tests
     public class GroupTests
     {
 
-        public GroupTests()
-        {
-
-        }
         [Fact]
-        public async Task AddUser_UserNotInGroup_ReturnsTrue()
+        public async Task AddUser_UserNotInList_ShouldAddUserAndReturnTrue()
         {
             // Arrange
-            var userId = "someUserId";
+            var userId = "expectingUserId";
             var groupId = 1;
+            var userGroups = new List<UserGroup>();
 
-            // Skapa en mock av DbContext
-            var mockDbContext = new MockItTakesAVillageContext();
+            var userRepositoryMock = new Mock<IUserRepository>();
+            userRepositoryMock.Setup(x => x.GetByIdAsync(userId)).ReturnsAsync(new ItTakesAVillageUser { Id = userId });
 
-            // Använd mocken i din GroupService
-            var groupService = new GroupService(mockDbContext.Object, new Mock<IUserService>().Object);
+            var groupRepositoryMock = new Mock<IGroupRepository>();
+            groupRepositoryMock.Setup(x => x.GetUserGroupsAsync()).ReturnsAsync(userGroups);
+
+            var sut = new GroupService(groupRepositoryMock.Object, userRepositoryMock.Object);
 
             // Act
-            var result = await groupService.AddUser(userId, groupId);
+            var actual = await sut.AddUser(userId, groupId);
 
             // Assert
-            Assert.True(result);
-            // Add additional assertions if needed
+            Assert.True(actual);
+            groupRepositoryMock.Verify(x => x.AddUserToGroupAsync(It.IsAny<UserGroup>()), Times.Once);
+            groupRepositoryMock.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
-
         [Fact]
-        public async Task CanAddUser()
+        public async Task AddUser_UserAlreadyInList_ShouldNotAddUserAndReturnFalse()
         {
             // Arrange
-            var optionsbuilder = new DbContextOptionsBuilder<ItTakesAVillageContext>();
-            var contextmock = new Mock<ItTakesAVillageContext>(optionsbuilder.Options);
-            var userservicemock = new Mock<IUserService>();
+            var expectedUserId = "expectedUserId";
+            var expectedGroupId = 1;
+            var userGroups = new List<UserGroup>
+            {
+                new UserGroup { UserId = expectedUserId, GroupId = expectedGroupId }
+            };
 
-            var sut = new GroupService(contextmock.Object, userservicemock.Object);
+            var userRepositoryMock = new Mock<IUserRepository>();
+            userRepositoryMock.Setup(x => x.GetByIdAsync(expectedUserId)).ReturnsAsync(new ItTakesAVillageUser { Id = expectedUserId });
 
-            var userId = "someUserId";
-            var groupId = 1;
+            var groupRepositoryMock = new Mock<IGroupRepository>();
+            groupRepositoryMock.Setup(x => x.GetUserGroupsAsync()).ReturnsAsync(userGroups);
 
-            //Act
-            var actual = await sut.AddUser(userId, groupId);
+            var sut = new GroupService(groupRepositoryMock.Object, userRepositoryMock.Object);
 
-            //Assert
-            Assert.True(actual);
-            contextmock.Verify(x=> x.SaveChangesAsync(default), Times.Once);
+            // Act
+            var actual = await sut.AddUser(expectedUserId, expectedGroupId);
+
+            // Assert
+            Assert.False(actual);
+            
         }
 
-
-
-
-        [Fact]
-        public async Task CanAddUserToGroup()
-        {
-            //Arrange
-            var userId = "userId123";
-            var groupId = 1;
-
-            var serviceMock = new Mock<IGroupService>();
-            serviceMock
-                .Setup(x => x.AddUser(userId, groupId))
-                .ReturnsAsync(true);
-
-            var sut = new TestClasses.GroupTests(serviceMock.Object);
-
-            //Act
-            var actual = await sut.AddUser(userId, groupId);
-
-            //Assert
-            Assert.True(actual);
-        }
-
-        //[Fact]
-        //public async Task ReturnsFalseIfUserIsAlreadyInGroup()
-        //{
-        //    // Arrange
-        //    var userId = "existinguser123";
-        //    var userId2 = "nonexistinguser";
-        //    var groupId = 1;
-
-        //    var userGroups = new List<UserGroup>
-        //    {
-        //        new UserGroup { UserId = userId, GroupId = groupId }
-        //    };
-
-        //    var groupServiceMock = new Mock<IGroupService>();
-        //    groupServiceMock.Setup(x => x.GetAllUserGroups()).ReturnsAsync(userGroups);
-
-        //    var sut = new TestClasses.GroupTests(groupServiceMock.Object);
-
-        //    // Act
-        //    var actual = await sut.AddUser("nonexisting", groupId);
-
-        //    // Assert
-        //    Assert.False(actual);
-        //}
     }
 }
