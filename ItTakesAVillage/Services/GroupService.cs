@@ -17,13 +17,11 @@ namespace ItTakesAVillage.Services
             _userRepository = userRepository;
         }
 
-        public async Task<List<Group>> GetAll()
-        {
-            return await _groupRepository.GetAllGroupsAsync();
-        }
+
 
         public async Task<int> Save(Group group)
         {
+
             await _groupRepository.AddGroupAsync(group);
             await _groupRepository.SaveChangesAsync();
 
@@ -57,6 +55,7 @@ namespace ItTakesAVillage.Services
         public async Task<List<ItTakesAVillageUser?>> GetMembers(int groupId)
         {
             var userGroups = await _groupRepository.GetUserGroupsAsync();
+
             var groupMembers = userGroups
                 .Where(x => x.GroupId == groupId)
                 .Select(x => x.User).ToList();

@@ -12,6 +12,7 @@ namespace ItTakesAVillage.Pages
     public class GroupModel : PageModel
     {
         private readonly IGroupService _groupService;
+        private readonly IGroupRepository _groupRepository;
         private readonly UserManager<ItTakesAVillageUser> _userManager;
 
         public ItTakesAVillageUser? CurrentUser { get; set; }
@@ -22,17 +23,20 @@ namespace ItTakesAVillage.Pages
         [BindProperty]
         public UserGroup NewUserGroup { get; set; } = new UserGroup();
 
-        public GroupModel(IGroupService groupService, UserManager<ItTakesAVillageUser> userManager)
+        public GroupModel(IGroupService groupService, 
+            UserManager<ItTakesAVillageUser> userManager,
+            IGroupRepository groupRepository)
         {
             _groupService = groupService;
             _userManager = userManager;
+            _groupRepository = groupRepository;
         }
 
         public async Task<IActionResult> OnGet()
         {
             CurrentUser = await _userManager.GetUserAsync(User);
             ViewData["UserId"] = new SelectList(_userManager.Users, "Id", "Email");
-            ViewData["GroupId"] = new SelectList(await _groupService.GetAll(), "Id", "Name");
+            ViewData["GroupId"] = new SelectList(await _groupRepository.GetAllGroupsAsync(), "Id", "Name");
             return Page();
         }
 

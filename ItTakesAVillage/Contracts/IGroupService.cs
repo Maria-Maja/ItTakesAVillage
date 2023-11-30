@@ -7,6 +7,5 @@ namespace ItTakesAVillage.Contracts
         Task<int> Save(Group group);
         Task<bool> AddUser(string userId, int groupId);
         Task<List<ItTakesAVillageUser?>> GetMembers(int groupId);
-        Task<List<Group>> GetAll();
     }
 }

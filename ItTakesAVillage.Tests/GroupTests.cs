@@ -11,12 +11,50 @@ namespace ItTakesAVillage.Tests
 {
     public class GroupTests
     {
+        [Fact]
+        public async Task AddGroup_UserNotInGroupWithSameName_ShouldReturnGroupId()
+        {
+            // Arrange
+            string name = "Family";
+
+            var userRepositoryMock = new Mock<IUserRepository>();
+            var groupRepositoryMock = new Mock<IGroupRepository>();
+
+            var group = new Group { Name = name };
+            var expectedId = 1;
+
+            groupRepositoryMock.Setup(repo => repo.AddGroupAsync(It.IsAny<Group>()))
+                              .Callback((Group g) => g.Id = expectedId);
+
+            var sut = new GroupService(groupRepositoryMock.Object, userRepositoryMock.Object);
+
+            // Act
+            var actual = await sut.Save(group);
+
+            // Assert
+            Assert.Equal(expectedId, actual);
+            groupRepositoryMock.Verify(x => x.AddGroupAsync(It.IsAny<Group>()), Times.Once);
+            groupRepositoryMock.Verify(x => x.SaveChangesAsync(), Times.Once);
+        }
+
+
+        [Fact]
+        public async Task AddGroup_UserIsInGroupWithSameName_ShouldReturnZero() //begränsa om användaren redan är med i en grupp med samma namn?
+        {
+            //Arrange
+
+
+            //Act
+
+            //Assert
+        }
+
 
         [Fact]
         public async Task AddUser_UserNotInList_ShouldAddUserAndReturnTrue()
         {
             // Arrange
-            var userId = "expectingUserId";
+            var userId = "expectedUserId";
             var groupId = 1;
             var userGroups = new List<UserGroup>();
 
