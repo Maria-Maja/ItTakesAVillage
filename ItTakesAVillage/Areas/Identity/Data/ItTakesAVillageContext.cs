@@ -10,7 +10,6 @@ namespace ItTakesAVillage.Data;
 public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
 {
     public DbSet<Models.BaseEvent> Events { get; set; }
-    //public DbSet<Models.DinnerInvitation> DinnerInvitations { get; set; }
     public DbSet<Models.Group> Groups { get; set; }
     public DbSet<UserGroup> UserGroups { get; set; }
     public DbSet<Notification> Notifications { get; set; }
@@ -29,5 +28,8 @@ public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
        .HasDiscriminator<string>("EventType")
        .HasValue<BaseEvent>("BaseEvent")
        .HasValue<DinnerInvitation>("DinnerInvitation");
+
+        builder.Entity<UserGroup>().Navigation(x => x.Group).AutoInclude();
+        builder.Entity<UserGroup>().Navigation(x => x.User).AutoInclude();
     }
 }

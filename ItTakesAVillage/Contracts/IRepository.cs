@@ -14,6 +14,5 @@ namespace ItTakesAVillage.Contracts
         Task UpdateAsync(T t);
         Task DeleteAsync(int id);
         Task<List<T>> GetByFilterAsync(Expression<Func<T, bool>> expression);
-        Task<List<UserGroup>> GetByIncludeFilterAsync(string userId);
     }
 }

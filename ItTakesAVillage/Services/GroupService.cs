@@ -62,11 +62,9 @@ namespace ItTakesAVillage.Services
         }
         public async Task<List<Group?>> GetGroupsByUserId(string userId)
         {
-            //var userGroups = await _userGroupRepository.GetByFilterAsync(x => x.UserId == userId);
-            var userGroups = await _userGroupRepository.GetByIncludeFilterAsync(userId);
+            var userGroups = await _userGroupRepository.GetByFilterAsync(x => x.UserId == userId);
 
             return userGroups.Select(x => x.Group).ToList();
         }
-
     }
 }
