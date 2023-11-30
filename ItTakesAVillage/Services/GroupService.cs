@@ -47,7 +47,7 @@ namespace ItTakesAVillage.Services
             var userGroup = new UserGroup
             {
                 UserId = userId,
-                GroupId = groupId
+                GroupId = groupId                
             };
 
             await _userGroupRepository.AddAsync(userGroup);
@@ -62,9 +62,11 @@ namespace ItTakesAVillage.Services
         }
         public async Task<List<Group?>> GetGroupsByUserId(string userId)
         {
-            var userGroups = await _userGroupRepository.GetByFilterAsync(x => x.UserId == userId);
+            //var userGroups = await _userGroupRepository.GetByFilterAsync(x => x.UserId == userId);
+            var userGroups = await _userGroupRepository.GetByIncludeFilterAsync(userId);
 
             return userGroups.Select(x => x.Group).ToList();
         }
+
     }
 }

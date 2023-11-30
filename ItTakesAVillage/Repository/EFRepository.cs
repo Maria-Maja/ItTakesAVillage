@@ -2,6 +2,7 @@
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace ItTakesAVillage.Repository
@@ -41,7 +42,10 @@ namespace ItTakesAVillage.Repository
         {
             return await _context.Set<T>().Where(expression).ToListAsync();
         }
-
+        public async Task<List<UserGroup>> GetByIncludeFilterAsync(string userId)
+        {
+            return await _context.UserGroups.Where(x => x.UserId == userId).Include(x => x.Group).ToListAsync();
+        }
         public Task UpdateAsync(T t)
         {
             throw new NotImplementedException();

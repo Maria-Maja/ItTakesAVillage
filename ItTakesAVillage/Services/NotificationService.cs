@@ -31,7 +31,6 @@ namespace ItTakesAVillage.Services
             var result = await GetAllByUserId(userId);
             return result.Where(x => x.IsRead == false).Count();
         }
-
         public async Task NotifyGroup(DinnerInvitation dinnerInvitation)
         {
             var groupMembers = await _groupService.GetMembers(dinnerInvitation.GroupId);
@@ -43,7 +42,6 @@ namespace ItTakesAVillage.Services
                 }
             }
         }
-
         private async Task Create(DinnerInvitation dinnerInvitation, string userId)
         {
             var creator = await _userRepository.GetAsync(dinnerInvitation.CreatorId);
@@ -58,7 +56,6 @@ namespace ItTakesAVillage.Services
 
             await _context.SaveChangesAsync();
         }
-
         public async Task UpdateIsRead(int notificationId)
         {
             var existingNotification = await GetOneById(notificationId); 
@@ -70,6 +67,5 @@ namespace ItTakesAVillage.Services
                 await _context.SaveChangesAsync();
             }
         }
-
     }
 }
