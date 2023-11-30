@@ -23,7 +23,7 @@ namespace ItTakesAVillage.Tests
             var group = new Group { Name = name };
             var expectedId = 1;
 
-            groupRepositoryMock.Setup(repo => repo.AddGroupAsync(It.IsAny<Group>()))
+            groupRepositoryMock.Setup(repo => repo.AddAsync(It.IsAny<Group>()))
                               .Callback((Group g) => g.Id = expectedId);
 
             var sut = new GroupService(groupRepositoryMock.Object, userRepositoryMock.Object);
@@ -33,7 +33,7 @@ namespace ItTakesAVillage.Tests
 
             // Assert
             Assert.Equal(expectedId, actual);
-            groupRepositoryMock.Verify(x => x.AddGroupAsync(It.IsAny<Group>()), Times.Once);
+            groupRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Group>()), Times.Once);
             groupRepositoryMock.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
 
@@ -71,7 +71,7 @@ namespace ItTakesAVillage.Tests
 
             // Assert
             Assert.True(actual);
-            groupRepositoryMock.Verify(x => x.AddUserToGroupAsync(It.IsAny<UserGroup>()), Times.Once);
+            groupRepositoryMock.Verify(x => x.AddUserAsync(It.IsAny<UserGroup>()), Times.Once);
             groupRepositoryMock.Verify(x => x.SaveChangesAsync(), Times.Once);
         }
         [Fact]

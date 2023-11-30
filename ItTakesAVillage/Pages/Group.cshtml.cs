@@ -23,7 +23,7 @@ namespace ItTakesAVillage.Pages
         [BindProperty]
         public UserGroup NewUserGroup { get; set; } = new UserGroup();
 
-        public GroupModel(IGroupService groupService, 
+        public GroupModel(IGroupService groupService,
             UserManager<ItTakesAVillageUser> userManager,
             IGroupRepository groupRepository)
         {
@@ -42,11 +42,12 @@ namespace ItTakesAVillage.Pages
 
         public async Task<IActionResult> OnPostNewGroupAsync()
         {
-            if (ModelState.IsValid)
+            CurrentUser = await _userManager.GetUserAsync(User);
+            if (ModelState.IsValid && CurrentUser != null)
             {
-                CurrentUser = await _userManager.GetUserAsync(User);
-                var newGroupId = await _groupService.Save(NewGroup);
-                if (CurrentUser != null && newGroupId != 0)
+                var newGroupId = await _groupService.Save(NewGroup, CurrentUser.Id);
+
+                if (newGroupId != 0)
                 {
                     await _groupService.AddUser(CurrentUser.Id, newGroupId);
                 }
