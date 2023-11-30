@@ -17,12 +17,9 @@ namespace ItTakesAVillage
             builder.Services.AddScoped<IGroupService, GroupService>(); //TODO kolla om vi behöver både repo och service?
             builder.Services.AddScoped<IDinnerInvitationService, DinnerInvitationService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
-            builder.Services.AddScoped<IRepository<Group>,EFRepository<Group>>();
+            builder.Services.AddScoped<IRepository<Group>,EFRepository <Group>>();
             builder.Services.AddScoped<IRepository<UserGroup>,EFRepository <UserGroup>>();
             builder.Services.AddScoped<IRepository<ItTakesAVillageUser>,EFRepository <ItTakesAVillageUser>>();
-            //builder.Services.AddScoped<IRepository<Group>>();
-            //builder.Services.AddScoped<IRepository<UserGroup>>();
-            //builder.Services.AddScoped<IRepository<ItTakesAVillageUser>>();
 
 
             builder.Services.AddDbContext<ItTakesAVillageContext>(options => options.UseSqlServer(connectionString));
