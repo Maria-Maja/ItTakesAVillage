@@ -1,7 +1,6 @@
 ﻿using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
-using ItTakesAVillage.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -13,7 +12,7 @@ namespace ItTakesAVillage.Services
         private readonly IRepository<ItTakesAVillageUser> _userRepository;
         private readonly IRepository<UserGroup> _userGroupRepository;
 
-        public GroupService(IRepository<Group> groupRepository, 
+        public GroupService(IRepository<Group> groupRepository,
             IRepository<ItTakesAVillageUser> userRepository,
             IRepository<UserGroup> userGroupRepository)
         {
@@ -33,18 +32,17 @@ namespace ItTakesAVillage.Services
 
             return group.Id;
         }
-
         public async Task<bool> AddUser(string userId, int groupId)
         {
-            var user = await _userRepository.GetByIdAsync(userId);
-            var usergroups = await _groupRepository.GetUserGroupsAsync();
+            var user = await _userRepository.GetAsync(userId);
+            var usergroups = await _userGroupRepository.GetAsync();
+            
+            if (user == null)
+                return false;
 
             bool userExistsInList = usergroups.Any(x => x.UserId == user.Id);
-
             if (userExistsInList)
-            {
                 return false;
-            }
 
             var userGroup = new UserGroup
             {
@@ -52,23 +50,16 @@ namespace ItTakesAVillage.Services
                 GroupId = groupId
             };
 
-            await _groupRepository.AddUserAsync(userGroup);
-            await _groupRepository.SaveChangesAsync();
+            await _userGroupRepository.AddAsync(userGroup);
 
             return true;
         }
-
         public async Task<List<ItTakesAVillageUser?>> GetMembers(int groupId)
         {
-            var userGroups = await _groupRepository.GetUserGroupsAsync();
+            var userGroups = await _userGroupRepository.GetByFilterAsync(x => x.GroupId == groupId);
 
-            var groupMembers = userGroups
-                .Where(x => x.GroupId == groupId)
-                .Select(x => x.User).ToList();
-
-            return groupMembers;
+            return userGroups.Select(x => x.User).ToList();
         }
-
         public async Task<List<Group?>> GetGroupsByUserId(string userId)
         {
             var userGroups = await _userGroupRepository.GetByFilterAsync(x => x.UserId == userId);

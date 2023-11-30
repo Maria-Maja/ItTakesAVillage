@@ -15,7 +15,7 @@ namespace ItTakesAVillage.Pages
         private readonly UserManager<ItTakesAVillageUser> _userManager;
         private readonly IDinnerInvitationService _dinnerInvitationService;
         private readonly INotificationService _notificationService;
-        private readonly IGroupRepository _groupRepository;
+        private readonly IGroupService _groupService;
 
         [BindProperty]
         public DinnerInvitation NewInvitation { get; set; } = new DinnerInvitation();
@@ -24,18 +24,18 @@ namespace ItTakesAVillage.Pages
         public DinnerInvitationModel(IDinnerInvitationService dinnerInvitationService, 
             UserManager<ItTakesAVillageUser> userManager,
             INotificationService notificationService,
-            IGroupRepository groupRepository)
+            IGroupService groupService)
         {
             _dinnerInvitationService = dinnerInvitationService;
             _userManager = userManager;
             _notificationService = notificationService;
-            _groupRepository = groupRepository;
+            _groupService = groupService;
         }
 
         public async Task<IActionResult> OnGet()
         {
-            ViewData["GroupId"] = new SelectList(await _groupRepository.GetAllGroupsAsync(), "Id", "Name");
             CurrentUser = await _userManager.GetUserAsync(User);
+            ViewData["GroupId"] = new SelectList(await _groupService.GetGroupsByUserId(CurrentUser.Id), "Id", "Name");
             return Page();
         }
 

@@ -14,11 +14,15 @@ namespace ItTakesAVillage
             var builder = WebApplication.CreateBuilder(args);
             var connectionString = builder.Configuration.GetConnectionString("ItTakesAVillageContextConnection") ?? throw new InvalidOperationException("Connection string 'ItTakesAVillageContextConnection' not found.");
 
-            builder.Services.AddScoped<IGroupRepository, GroupRepository>();
             builder.Services.AddScoped<IGroupService, GroupService>(); //TODO kolla om vi behöver både repo och service?
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IDinnerInvitationService, DinnerInvitationService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<EFRepository<Group>>();
+            builder.Services.AddScoped<EFRepository<UserGroup>>();
+            builder.Services.AddScoped<EFRepository<ItTakesAVillageUser>>();
+            builder.Services.AddScoped<IRepository<Group>>();
+            builder.Services.AddScoped<IRepository<UserGroup>>();
+            builder.Services.AddScoped<IRepository<ItTakesAVillageUser>>();
 
             builder.Services.AddDbContext<ItTakesAVillageContext>(options => options.UseSqlServer(connectionString));
 

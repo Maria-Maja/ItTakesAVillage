@@ -12,34 +12,25 @@ namespace ItTakesAVillage.Pages
     public class GroupModel : PageModel
     {
         private readonly IGroupService _groupService;
-        private readonly IGroupRepository _groupRepository;
         private readonly UserManager<ItTakesAVillageUser> _userManager;
-
         public ItTakesAVillageUser? CurrentUser { get; set; }
-
         [BindProperty]
         public Models.Group NewGroup { get; set; } = new Models.Group();
-
         [BindProperty]
         public UserGroup NewUserGroup { get; set; } = new UserGroup();
 
-        public GroupModel(IGroupService groupService,
-            UserManager<ItTakesAVillageUser> userManager,
-            IGroupRepository groupRepository)
+        public GroupModel(IGroupService groupService,UserManager<ItTakesAVillageUser> userManager)
         {
             _groupService = groupService;
             _userManager = userManager;
-            _groupRepository = groupRepository;
         }
-
         public async Task<IActionResult> OnGet()
         {
             CurrentUser = await _userManager.GetUserAsync(User);
             ViewData["UserId"] = new SelectList(_userManager.Users, "Id", "Email");
-            ViewData["GroupId"] = new SelectList(await _groupRepository.GetAllGroupsAsync(), "Id", "Name");
+            ViewData["GroupId"] = new SelectList(await _groupService.GetGroupsByUserId(CurrentUser.Id), "Id", "Name");
             return Page();
         }
-
         public async Task<IActionResult> OnPostNewGroupAsync()
         {
             CurrentUser = await _userManager.GetUserAsync(User);
@@ -54,7 +45,6 @@ namespace ItTakesAVillage.Pages
             }
             return RedirectToPage("/Group");
         }
-
         public async Task<IActionResult> OnPostAddUserToGroupAsync()
         {
             if (ModelState.IsValid)
@@ -63,6 +53,5 @@ namespace ItTakesAVillage.Pages
             }
             return RedirectToPage("/Group");
         }
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using ItTakesAVillage.Data;
+﻿using ItTakesAVillage.Contracts;
+using ItTakesAVillage.Data;
+using ItTakesAVillage.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -11,9 +13,10 @@ namespace ItTakesAVillage.Repository
         {
             _context = context;
         }
-        public Task AddAsync(T t)
+        public async Task AddAsync(T t)
         {
-            throw new NotImplementedException();
+            await _context.Set<T>().AddAsync(t);
+            await _context.SaveChangesAsync();
         }
 
         public Task DeleteAsync(int id)
@@ -21,12 +24,15 @@ namespace ItTakesAVillage.Repository
             throw new NotImplementedException();
         }
 
-        public Task GetAsync()
+        public async Task<List<T>> GetAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().ToListAsync();
         }
-
         public async Task<T?> GetAsync(int id)
+        {
+            return await _context.Set<T>().FindAsync(id);
+        }
+        public async Task<T?> GetAsync(string id)
         {
             return await _context.Set<T>().FindAsync(id);
         }

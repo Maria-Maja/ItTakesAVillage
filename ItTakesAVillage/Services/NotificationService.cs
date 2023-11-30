@@ -11,12 +11,12 @@ namespace ItTakesAVillage.Services
     public class NotificationService : INotificationService
     {
         private readonly IGroupService _groupService;
-        private readonly IUserRepository _userRepository;
+        private readonly IRepository<ItTakesAVillageUser> _userRepository;
         private readonly ItTakesAVillageContext _context;
 
         public NotificationService(IGroupService groupService,
             ItTakesAVillageContext context,
-            IUserRepository userRepository)
+            IRepository<ItTakesAVillageUser> userRepository)
         {
             _groupService = groupService;
             _userRepository = userRepository;
@@ -46,7 +46,7 @@ namespace ItTakesAVillage.Services
 
         private async Task Create(DinnerInvitation dinnerInvitation, string userId)
         {
-            var creator = await _userRepository.GetByIdAsync(dinnerInvitation.CreatorId);
+            var creator = await _userRepository.GetAsync(dinnerInvitation.CreatorId);
             _context.Notifications.Add
                (new Notification
                {
