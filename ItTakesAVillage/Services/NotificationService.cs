@@ -1,6 +1,7 @@
 ﻿using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
+using ItTakesAVillage.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
@@ -10,15 +11,15 @@ namespace ItTakesAVillage.Services
     public class NotificationService : INotificationService
     {
         private readonly IGroupService _groupService;
+        private readonly IRepository<ItTakesAVillageUser> _userRepository;
         private readonly ItTakesAVillageContext _context;
-        private readonly IUserService _userService;
 
         public NotificationService(IGroupService groupService,
             ItTakesAVillageContext context,
-            IUserService userService)
+            IRepository<ItTakesAVillageUser> userRepository)
         {
             _groupService = groupService;
-            _userService = userService;
+            _userRepository = userRepository;
             _context = context;
         }
 
@@ -30,7 +31,6 @@ namespace ItTakesAVillage.Services
             var result = await GetAllByUserId(userId);
             return result.Where(x => x.IsRead == false).Count();
         }
-
         public async Task NotifyGroup(DinnerInvitation dinnerInvitation)
         {
             var groupMembers = await _groupService.GetMembers(dinnerInvitation.GroupId);
@@ -42,10 +42,9 @@ namespace ItTakesAVillage.Services
                 }
             }
         }
-
         private async Task Create(DinnerInvitation dinnerInvitation, string userId)
         {
-            var creator = await _userService.GetById(dinnerInvitation.CreatorId);
+            var creator = await _userRepository.GetAsync(dinnerInvitation.CreatorId);
             _context.Notifications.Add
                (new Notification
                {
@@ -57,7 +56,6 @@ namespace ItTakesAVillage.Services
 
             await _context.SaveChangesAsync();
         }
-
         public async Task UpdateIsRead(int notificationId)
         {
             var existingNotification = await GetOneById(notificationId); 
@@ -69,6 +67,5 @@ namespace ItTakesAVillage.Services
                 await _context.SaveChangesAsync();
             }
         }
-
     }
 }

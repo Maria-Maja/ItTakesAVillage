@@ -4,6 +4,7 @@ using ItTakesAVillage.Data;
 using ItTakesAVillage.Models;
 using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Services;
+using ItTakesAVillage.Repository;
 namespace ItTakesAVillage
 {
     public class Program
@@ -12,11 +13,14 @@ namespace ItTakesAVillage
         {
             var builder = WebApplication.CreateBuilder(args);
             var connectionString = builder.Configuration.GetConnectionString("ItTakesAVillageContextConnection") ?? throw new InvalidOperationException("Connection string 'ItTakesAVillageContextConnection' not found.");
-
-            builder.Services.AddScoped<IGroupService, GroupService>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            
+            builder.Services.AddScoped<IGroupService, GroupService>(); //TODO kolla om vi behöver både repo och service?
             builder.Services.AddScoped<IDinnerInvitationService, DinnerInvitationService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<IRepository<Group>,EFRepository <Group>>();
+            builder.Services.AddScoped<IRepository<UserGroup>,EFRepository <UserGroup>>();
+            builder.Services.AddScoped<IRepository<ItTakesAVillageUser>,EFRepository <ItTakesAVillageUser>>();
+
 
             builder.Services.AddDbContext<ItTakesAVillageContext>(options => options.UseSqlServer(connectionString));
 

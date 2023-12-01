@@ -34,8 +34,9 @@ namespace ItTakesAVillage.Pages
 
         public async Task<IActionResult> OnGet()
         {
-            ViewData["GroupId"] = new SelectList(await _groupService.GetAll(), "Id", "Name");
             CurrentUser = await _userManager.GetUserAsync(User);
+            if(CurrentUser != null)
+                ViewData["GroupId"] = new SelectList(await _groupService.GetGroupsByUserId(CurrentUser.Id), "Id", "Name");
             return Page();
         }
 

@@ -4,9 +4,9 @@ namespace ItTakesAVillage.Contracts
 {
     public interface IGroupService
     {
-        Task<int> Save(Group group);
-        Task AddUser(string userId, int groupId);
+        Task<int> Save(Group group, string userId);
+        Task<bool> AddUser(string userId, int groupId);
         Task<List<ItTakesAVillageUser?>> GetMembers(int groupId);
-        Task<List<Group>> GetAll();
+        Task<List<Group?>> GetGroupsByUserId(string userId);
     }
 }

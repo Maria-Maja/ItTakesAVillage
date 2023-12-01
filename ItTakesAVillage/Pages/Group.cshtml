@@ -9,10 +9,9 @@
     <form method="post" asp-page-handler="NewGroup">
         <label class="form-label">Ange namn på grupp</label>
         <input class="form-control w-25" asp-for="NewGroup.Name" />
-
         <input type="submit" class="btn btn-primary" value="Spara" />
     </form>
-
+    @* TODO visa bara nedan formulär om användaren har grupper *@
     <form method="post" asp-page-handler="AddUserToGroup">
         <label class="form-label">Lägg till medlem i grupp</label>
         <select class="form-control w-25" asp-for="NewUserGroup.GroupId" asp-items="ViewBag.GroupId">
