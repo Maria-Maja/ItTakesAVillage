@@ -12,60 +12,59 @@ namespace ItTakesAVillage.Services
     {
         private readonly IGroupService _groupService;
         private readonly IRepository<ItTakesAVillageUser> _userRepository;
-        private readonly ItTakesAVillageContext _context;
+        private readonly IRepository<Notification> _notificationRepository;
 
         public NotificationService(IGroupService groupService,
-            ItTakesAVillageContext context,
-            IRepository<ItTakesAVillageUser> userRepository)
+            IRepository<ItTakesAVillageUser> userRepository,
+            IRepository<Notification> notificationRepository)
         {
             _groupService = groupService;
             _userRepository = userRepository;
-            _context = context;
+            _notificationRepository = notificationRepository;
         }
 
-        public async Task<List<Notification>> GetAllByUserId(string userId) =>  await _context.Notifications.Where(x => x.UserId == userId).ToListAsync();
-        private async Task<Notification> GetOneById(int notificationId) => await _context.Notifications.FirstOrDefaultAsync(x => x.Id == notificationId); //TODO nullchecka metod
-
-        public async Task<int> Count(string userId)
+        public async Task<List<Notification>> GetAsync(string userId) => await _notificationRepository.GetByFilterAsync(x => x.UserId == userId);
+        public async Task<int> CountAsync(string userId)
         {
-            var result = await GetAllByUserId(userId);
-            return result.Where(x => x.IsRead == false).Count();
+            var result = await _notificationRepository.GetByFilterAsync(x => x.UserId == userId && x.IsRead == false);
+
+            return result.Count();
         }
-        public async Task NotifyGroup(DinnerInvitation dinnerInvitation)
+        public async Task NotifyGroupAsync(DinnerInvitation dinnerInvitation)
         {
             var groupMembers = await _groupService.GetMembers(dinnerInvitation.GroupId);
+
             if (!groupMembers.IsNullOrEmpty())
             {
                 foreach (var member in groupMembers)
                 {
-                    await Create(dinnerInvitation, member.Id); //TODO nullchecka member.id
+                    if (member != null)
+                        await CreateAsync(dinnerInvitation, member.Id);
                 }
             }
         }
-        private async Task Create(DinnerInvitation dinnerInvitation, string userId)
+        public async Task UpdateIsReadAsync(int notificationId)
         {
-            var creator = await _userRepository.GetAsync(dinnerInvitation.CreatorId);
-            _context.Notifications.Add
-               (new Notification
-               {
-                   UserId = userId,
-                   Title = $"Matlag hos {creator.FirstName} {creator.LastName}",
-                   IsRead = false,
-                   RelatedEvent = dinnerInvitation
-               });
+            var existingNotification = await _notificationRepository.GetAsync(notificationId);
 
-            await _context.SaveChangesAsync();
-        }
-        public async Task UpdateIsRead(int notificationId)
-        {
-            var existingNotification = await GetOneById(notificationId); 
-            
-            if(existingNotification != null)
+            if (existingNotification != null)
             {
                 existingNotification.IsRead = true;
 
-                await _context.SaveChangesAsync();
+                await _notificationRepository.UpdateAsync(existingNotification);
             }
+        }
+        private async Task CreateAsync(DinnerInvitation dinnerInvitation, string userId)
+        {
+            var creator = await _userRepository.GetAsync(dinnerInvitation.CreatorId);
+            var newNotification = new Notification
+            {
+                UserId = userId,
+                Title = creator == null ? $"Matlag hos okänd" : $"Matlag hos {creator.FirstName} {creator.LastName}",
+                IsRead = false,
+                RelatedEvent = dinnerInvitation
+            };
+            await _notificationRepository.AddAsync(newNotification);
         }
     }
 }

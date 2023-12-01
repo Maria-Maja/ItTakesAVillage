@@ -20,6 +20,8 @@ namespace ItTakesAVillage
             builder.Services.AddScoped<IRepository<Group>,EFRepository <Group>>();
             builder.Services.AddScoped<IRepository<UserGroup>,EFRepository <UserGroup>>();
             builder.Services.AddScoped<IRepository<ItTakesAVillageUser>,EFRepository <ItTakesAVillageUser>>();
+            builder.Services.AddScoped<IRepository<Notification>,EFRepository <Notification>>();
+            builder.Services.AddScoped<IRepository<DinnerInvitation>,EFRepository <DinnerInvitation>>();
 
 
             builder.Services.AddDbContext<ItTakesAVillageContext>(options => options.UseSqlServer(connectionString));

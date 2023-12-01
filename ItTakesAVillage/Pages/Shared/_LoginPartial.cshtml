@@ -12,7 +12,7 @@
 <ul class="navbar-nav">
     @if (user != null)
     {
-        int unreadNotifications = await notificationService.Count(user.Id);
+        int unreadNotifications = await notificationService.CountAsync(user.Id);
 
         <li class="nav-item">
             <a class="nav-link text-dark" asp-page="/Notification">
