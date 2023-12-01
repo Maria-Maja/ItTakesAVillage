@@ -51,7 +51,6 @@ namespace ItTakesAVillage.Pages
                     bool success = await _dinnerInvitationService.Create(NewInvitation);                    
                     if(success)
                         await _notificationService.NotifyGroupAsync(NewInvitation);                                       
-                    //TODO Om ovan lyckas, ska en notification skickas till alla i gruppen
                 }
             }
             return RedirectToPage("/DinnerInvitation");
