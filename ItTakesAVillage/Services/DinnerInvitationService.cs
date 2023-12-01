@@ -7,24 +7,27 @@ namespace ItTakesAVillage.Services
 {
     public class DinnerInvitationService : IDinnerInvitationService
     {
-        private readonly ItTakesAVillageContext _context;
+        private readonly IRepository<DinnerInvitation> _dinnerInvitationRepository;
 
-        public DinnerInvitationService(ItTakesAVillageContext context)
+        public DinnerInvitationService(IRepository<DinnerInvitation> dinnerInvitationRepository)
         {
-            _context = context;
+            _dinnerInvitationRepository = dinnerInvitationRepository;
         }
-
         public async Task<List<DinnerInvitation>> GetAll()
         {
-            return await _context.Events
-                .OfType<DinnerInvitation>()
-                .ToListAsync();
+            return await _dinnerInvitationRepository.GetOfTypeAsync<BaseEvent>();
         }
-
-        public async Task Create(DinnerInvitation invitation)
+        public async Task<bool> Create(DinnerInvitation invitation)
         {
-            await _context.Events.AddAsync(invitation);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _dinnerInvitationRepository.AddAsync(invitation);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

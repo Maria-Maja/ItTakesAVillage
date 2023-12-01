@@ -32,7 +32,7 @@ namespace ItTakesAVillage.Pages
             DinnerInvitations = await _dinnerInvitationService.GetAll();
 
             if (CurrentUser != null)
-                Notifications = await _notificationService.GetAllByUserId(CurrentUser.Id);
+                Notifications = await _notificationService.GetAsync(CurrentUser.Id);
 
 
             return Page();
@@ -41,7 +41,7 @@ namespace ItTakesAVillage.Pages
         {
             if (Notification.Id != 0)
             {
-                await _notificationService.UpdateIsRead(Notification.Id);
+                await _notificationService.UpdateIsReadAsync(Notification.Id);
             }
             return RedirectToPage("/Notification");
         }

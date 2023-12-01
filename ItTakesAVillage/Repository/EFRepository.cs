@@ -42,9 +42,18 @@ namespace ItTakesAVillage.Repository
         {
             return await _context.Set<T>().Where(expression).ToListAsync();
         }
-        public Task UpdateAsync(T t)
+
+        public async Task<List<T>> GetOfTypeAsync<R>() where R : class
         {
-            throw new NotImplementedException();
+            return await _context.Set<R>()
+                .OfType<T>()
+                .ToListAsync();
+        }
+
+        public async Task UpdateAsync(T t)
+        {
+            _context.Entry(t).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }
