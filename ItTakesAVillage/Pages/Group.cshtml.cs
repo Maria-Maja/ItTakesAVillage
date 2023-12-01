@@ -37,11 +37,12 @@ namespace ItTakesAVillage.Pages
             CurrentUser = await _userManager.GetUserAsync(User);
             if (ModelState.IsValid && CurrentUser != null)
             {
+                NewGroup.CreatorId = CurrentUser.Id;
                 var newGroupId = await _groupService.Save(NewGroup, CurrentUser.Id);
 
                 if (newGroupId != 0)
                 {
-                    await _groupService.AddUser(CurrentUser.Id, newGroupId);
+                    await _groupService.AddUser(CurrentUser.Id, newGroupId); //TODO lägg till toast för success/ not success
                 }
             }
             return RedirectToPage("/Group");

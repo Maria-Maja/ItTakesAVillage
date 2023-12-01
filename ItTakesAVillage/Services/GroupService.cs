@@ -36,11 +36,11 @@ namespace ItTakesAVillage.Services
         {
             var user = await _userRepository.GetAsync(userId);
             var usergroups = await _userGroupRepository.GetAsync();
-            
+
             if (user == null)
                 return false;
 
-            bool userExistsInList = usergroups.Any(x => x.UserId == user.Id);
+            bool userExistsInList = usergroups.Any(x => x.UserId == user.Id && x.GroupId == groupId);
             if (userExistsInList)
                 return false;
 
