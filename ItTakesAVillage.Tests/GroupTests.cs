@@ -12,6 +12,21 @@ namespace ItTakesAVillage.Tests
 {
     public class GroupTests
     {
+        private readonly Mock<IRepository<UserGroup>> _userGroupRepositoryMock;
+        private readonly Mock<IRepository<ItTakesAVillageUser>> _userRepositoryMock;
+        private readonly Mock<IRepository<Group>> _groupRepositoryMock;
+        private readonly GroupService _sut;
+
+        public GroupTests()
+        {
+            _userGroupRepositoryMock = new Mock<IRepository<UserGroup>>();
+            _userRepositoryMock = new Mock<IRepository<ItTakesAVillageUser>>();
+            _groupRepositoryMock = new Mock<IRepository<Group>>();
+
+            _sut = new GroupService(_groupRepositoryMock.Object,
+                                   _userRepositoryMock.Object,
+                                   _userGroupRepositoryMock.Object);
+        }
         [Fact]
         public async Task Save_WhenGroupDoesNotExist_ReturnsGroupId()
         {
@@ -19,27 +34,19 @@ namespace ItTakesAVillage.Tests
             var group = new Group { Id = 1, Name = "TestGroup" };
             var userId = "testUserId";
 
-            var mockUserGroupRepository = new Mock<IRepository<UserGroup>>();
-            mockUserGroupRepository.Setup(repo => repo.GetByFilterAsync(It.IsAny<Expression<Func<UserGroup, bool>>>()))
+            _userGroupRepositoryMock.Setup(x => x.GetByFilterAsync(It.IsAny<Expression<Func<UserGroup, bool>>>()))
                                   .ReturnsAsync(new List<UserGroup>());
 
-            var mockUserRepository = new Mock<IRepository<ItTakesAVillageUser>>();
-            var mockGroupRepository = new Mock<IRepository<Group>>();
-
-            mockGroupRepository.Setup(repo => repo.AddAsync(It.IsAny<Group>()))
+            _groupRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Group>()))
                               .Callback((Group g) => { g.Id = group.Id; })
                               .Returns(Task.CompletedTask);
 
-            var sut = new GroupService(mockGroupRepository.Object, 
-                mockUserRepository.Object, 
-                mockUserGroupRepository.Object);
-
             // Act
-            var actual = await sut.Save(group, userId);
+            var actual = await _sut.Save(group, userId);
 
             // Assert
             Assert.Equal(group.Id, actual);
-            mockGroupRepository.Verify(repo => repo.AddAsync(It.Is<Group>(g => g.Equals(group))), Times.Once);
+            _groupRepositoryMock.Verify(x => x.AddAsync(It.Is<Group>(g => g.Equals(group))), Times.Once);
         }
 
         [Fact]
@@ -50,25 +57,17 @@ namespace ItTakesAVillage.Tests
             var group = new Group { Id = 2, Name = "TestGroup" };
             var userId = "testUserId";
 
-            var mockUserGroupRepository = new Mock<IRepository<UserGroup>>();
-            mockUserGroupRepository.Setup(x => x.GetByFilterAsync(It.IsAny<Expression<Func<UserGroup, bool>>>()))
+            _userGroupRepositoryMock.Setup(x => x.GetByFilterAsync(It.IsAny<Expression<Func<UserGroup, bool>>>()))
                                   .ReturnsAsync(new List<UserGroup> { new UserGroup { UserId = userId, Group = existingGroup } });
 
-            var mockGroupRepository = new Mock<IRepository<Group>>();
-            var mockUserRepository = new Mock<IRepository<ItTakesAVillageUser>>();
-
-            var sut = new GroupService(mockGroupRepository.Object, 
-                mockUserRepository.Object, 
-                mockUserGroupRepository.Object);
-
             // Act
-            var actual = await sut.Save(group, userId);
+            var actual = await _sut.Save(group, userId);
 
             // Assert
             Assert.Equal(0, actual);
 
             // Verify that AddAsync was not called
-            mockGroupRepository.Verify(x => x.AddAsync(It.IsAny<Group>()), Times.Never);
+            _groupRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Group>()), Times.Never);
         }
 
         [Fact]
@@ -79,25 +78,16 @@ namespace ItTakesAVillage.Tests
             var groupId = 1;
             var userGroups = new List<UserGroup>();
 
-            var groupRepositoryMock = new Mock<IRepository<Group>>();
-            var userRepositoryMock = new Mock<IRepository<ItTakesAVillageUser>>();
-            userRepositoryMock.Setup(x => x.GetAsync(userId)).ReturnsAsync(new ItTakesAVillageUser { Id = userId });
+            _userRepositoryMock.Setup(x => x.GetAsync(userId)).ReturnsAsync(new ItTakesAVillageUser { Id = userId });
 
-            var userGroupRepositoryMock = new Mock<IRepository<UserGroup>>();
-            userGroupRepositoryMock.Setup(x => x.GetAsync()).ReturnsAsync(userGroups);
-
-            var sut = new GroupService(groupRepositoryMock.Object,
-                userRepositoryMock.Object,
-                userGroupRepositoryMock.Object);
+            _userGroupRepositoryMock.Setup(x => x.GetAsync()).ReturnsAsync(userGroups);
 
             // Act
-            var actual = await sut.AddUser(userId, groupId);
+            var actual = await _sut.AddUser(userId, groupId);
 
             // Assert
             Assert.True(actual);
-            userGroupRepositoryMock.Verify(x => x.AddAsync(It.Is<UserGroup>(ug => ug.UserId == userId && ug.GroupId == groupId)), Times.Once);
-
-            //userGroupRepositoryMock.Verify(x => x.AddAsync(It.IsAny<UserGroup>()), Times.Once);
+            _userGroupRepositoryMock.Verify(x => x.AddAsync(It.Is<UserGroup>(ug => ug.UserId == userId && ug.GroupId == groupId)), Times.Once);
         }
 
         [Fact]
@@ -111,19 +101,12 @@ namespace ItTakesAVillage.Tests
                 new UserGroup { UserId = expectedUserId, GroupId = expectedGroupId }
             };
 
-            var userRepositoryMock = new Mock<IRepository<ItTakesAVillageUser>>();
-            userRepositoryMock.Setup(x => x.GetAsync(expectedUserId)).ReturnsAsync(new ItTakesAVillageUser { Id = expectedUserId });
+            _userRepositoryMock.Setup(x => x.GetAsync(expectedUserId)).ReturnsAsync(new ItTakesAVillageUser { Id = expectedUserId });
 
-            var userGroupRepositoryMock = new Mock<IRepository<UserGroup>>();
-            userGroupRepositoryMock.Setup(x => x.GetAsync()).ReturnsAsync(userGroups);
-            var groupRepositoryMock = new Mock<IRepository<Group>>();
-
-            var sut = new GroupService(groupRepositoryMock.Object,
-                userRepositoryMock.Object,
-                userGroupRepositoryMock.Object);
+            _userGroupRepositoryMock.Setup(x => x.GetAsync()).ReturnsAsync(userGroups);
 
             // Act
-            var actual = await sut.AddUser(expectedUserId, expectedGroupId);
+            var actual = await _sut.AddUser(expectedUserId, expectedGroupId);
 
             // Assert
             Assert.False(actual);

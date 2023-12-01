@@ -19,15 +19,11 @@ namespace ItTakesAVillage.Services
         }
         public async Task<bool> Create(DinnerInvitation invitation)
         {
-            try
-            {
-                await _dinnerInvitationRepository.AddAsync(invitation);
-                return true;
-            }
-            catch
-            {
+            if (invitation.DateTime.Date < DateTime.Now)
                 return false;
-            }
+
+            await _dinnerInvitationRepository.AddAsync(invitation);
+            return true;
         }
     }
 }

@@ -54,7 +54,7 @@ namespace ItTakesAVillage.Services
                 await _notificationRepository.UpdateAsync(existingNotification);
             }
         }
-        private async Task CreateAsync(DinnerInvitation dinnerInvitation, string userId)
+        public async Task CreateAsync(DinnerInvitation dinnerInvitation, string userId)
         {
             var creator = await _userRepository.GetAsync(dinnerInvitation.CreatorId);
             var newNotification = new Notification
