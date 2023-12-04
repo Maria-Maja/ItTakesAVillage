@@ -1,32 +1,27 @@
 ﻿@page
 @model ItTakesAVillage.Pages.NotificationModel
 @{
+    @Html.AntiForgeryToken()
 }
 
 @if (Model.CurrentUser != null)
 {
     if (Model.Notifications.Any())
     {
-        <h2>På gång: </h2>
-        foreach (var notification in Model.Notifications)
-        {
-            var textstyle = notification.IsRead ? "" : "fw-bold";
-            <div class="accordion" id="notification-accordion">
+        <div class="accordion" id="notification-accordion">
+            @foreach (var notification in Model.Notifications)
+            {
+                var textstyle = notification.IsRead ? "" : "fw-bold";
                 <div class="accordion-item">
-                    <form method="post" asp-page-handler="HandleAccordionClick">
-                        <input type="hidden" asp-for="Notification.Id" value="@notification.Id"/>
-                        <h2 class="accordion-header" id="heading_@notification.Id">
-                            <button class="accordion-button collapsed @textstyle"
-                               type="submit"
-                               data-bs-toggle="collapse"
-                               data-bs-target="#collapse_@notification.Id"
-                               aria-expanded="false"
-                               aria-controls="collapse_@notification.Id"
-                               >                               
-                                @notification.RelatedEvent.DateTime.ToString("g") - @notification.Title
-                            </button>
-                        </h2>
-                        </form>
+                    <button class="accordion-button collapsed @textstyle"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse_@notification.Id"
+                            aria-expanded="false"
+                            aria-controls="collapse_@notification.Id"
+                            onclick="handleAccordionClick(@notification.Id)">
+                        @notification.RelatedEvent.DateTime.ToString("g") - @notification.Title
+                    </button>
 
                     <div id="collapse_@notification.Id" class="accordion-collapse collapse" aria-labelledby="heading_@notification.Id" data-bs-parent="#notification-accordion">
                         <div class="accordion-body">
@@ -36,11 +31,39 @@
                             }
                             <p>@invitation.Course</p>
                             <p>@invitation.Location</p>
-
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
+        @*  <h2>På gång: </h2>
+        <div class="accordion" id="notification-accordion">
+            @foreach (var notification in Model.Notifications)
+            {
+                var textstyle = notification.IsRead ? "" : "fw-bold";
+                <div class="accordion-item">
+                    <button class="accordion-button collapsed @textstyle"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse_@notification.Id"
+                            aria-expanded="false"
+                            aria-controls="collapse_@notification.Id"
+                            onclick="handleAccordionClick(@notification.Id)">
+                        @notification.RelatedEvent.DateTime.ToString("g") - @notification.Title
+                    </button>
+
+                    <div id="collapse_@notification.Id" class="accordion-collapse collapse" aria-labelledby="heading_@notification.Id" data-bs-parent="#notification-accordion">
+                        <div class="accordion-body">
+                            @*TODO: skapa en partial view och gör den generisk. Skapa en partial view för dinnerinvitation och en för playdate tex
+                            @{
+                                var invitation = Model.DinnerInvitations.FirstOrDefault(x => x.Id == notification.RelatedEvent.Id);
+                            }
+                            <p>@invitation.Course</p>
+                            <p>@invitation.Location</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div> *@
     }
 }
