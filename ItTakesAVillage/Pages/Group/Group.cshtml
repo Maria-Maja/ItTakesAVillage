@@ -1,6 +1,6 @@
-﻿
-
-@page
+﻿@page
+@using ItTakesAVillage.Contracts
+@inject IGroupService _groupService
 @model ItTakesAVillage.Pages.GroupModel
 @{
 
@@ -40,12 +40,11 @@
                         </h2>
 
                         <div id="collapse_@group.Id" class="accordion-collapse collapse" aria-labelledby="heading_@group.Id" data-bs-parent="#notification-accordion">
-                            <div class="accordion-body">
-                                //TODO: Skapa en partialview för att visa gruppens medlemmar
+                            <div class="accordion-body">                                
                                 @{
-                                    
+                                    var members = 
                                 }
-                                <p>Här visas alla medlemmar i gruppen</p>
+                                <partial name="_MemberPartial" />
                             </div>
                         </div>
                     </div>
