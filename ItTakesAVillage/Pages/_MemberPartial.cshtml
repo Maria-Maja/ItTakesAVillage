@@ -1,0 +1,8 @@
+﻿@model List<ItTakesAVillage.Models.ItTakesAVillageUser>
+
+@foreach (var member in Model)
+{
+    <div class="container">
+        <p>@member.FirstName @member.LastName<p/>
+    </div>
+}

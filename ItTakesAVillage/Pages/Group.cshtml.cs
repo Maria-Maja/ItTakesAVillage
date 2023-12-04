@@ -18,6 +18,7 @@ namespace ItTakesAVillage.Pages
         public Models.Group NewGroup { get; set; } = new Models.Group();
         [BindProperty]
         public UserGroup NewUserGroup { get; set; } = new UserGroup();
+        public List<UserGroup> UserGroups { get; set; }
         public List<Models.Group?> GroupsOfCurrentUser { get; set; }
         public List<UserGroup> GroupMembers { get; set; } = []; //new();
 
@@ -29,6 +30,7 @@ namespace ItTakesAVillage.Pages
         public async Task<IActionResult> OnGet()
         {
             CurrentUser = await _userManager.GetUserAsync(User);
+            
             if (CurrentUser != null)
             {
                 var allUsers = _userManager.Users.Where(x => x.Id != CurrentUser.Id).ToList();
