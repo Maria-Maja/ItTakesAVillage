@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 
 namespace ItTakesAVillage.Pages
 {
@@ -15,7 +16,7 @@ namespace ItTakesAVillage.Pages
 
         public ItTakesAVillageUser? CurrentUser { get; set; }
         [BindProperty]
-        public Notification? Notification { get; set; }
+        public int NotificationId { get; set; }
         public List<Notification> Notifications { get; set; } = new();
         public List<DinnerInvitation> DinnerInvitations { get; set; } = new();
         public NotificationModel(UserManager<ItTakesAVillageUser> userManager,
@@ -34,16 +35,20 @@ namespace ItTakesAVillage.Pages
             if (CurrentUser != null)
                 Notifications = await _notificationService.GetAsync(CurrentUser.Id);
 
-
             return Page();
         }
-        public async Task<IActionResult> OnPostHandleAccordionClick()
+        public async Task<IActionResult> OnPostHandleAccordionClick([FromBody] int notificationId)
         {
-            if (Notification.Id != 0)
+            CurrentUser = await _userManager.GetUserAsync(User);
+            if (notificationId != 0 && CurrentUser != null)
             {
-                await _notificationService.UpdateIsReadAsync(Notification.Id);
+                await _notificationService.UpdateIsReadAsync(notificationId);
+                int unreadNotificationCount = await _notificationService.CountAsync(CurrentUser.Id);
+
+                return new JsonResult(new { success = true, unreadCount = unreadNotificationCount });
             }
-            return RedirectToPage("/Notification");
+
+            return new JsonResult(new { success = false });
         }
     }
 }
