@@ -1,29 +1,76 @@
 ﻿@page
+@using ItTakesAVillage.Contracts
+@inject IGroupService _groupService
 @model ItTakesAVillage.Pages.DinnerInvitationModel
 @{
 }
 
 @if (Model.CurrentUser != null)
 {
-    <div class="container d-flex align-items-center flex-column">
+    <div class="d-flex align-items-center flex-column">
+        <img class="mx-auto" src="img/matlag.png" />
+        <h2 class="abrilFont text-center mt-2 mb-5">Matlag</h2>
+    </div>
+    <div class="blueBgColor p-5">
+        <div class="container w-75">
+            <div class="">
+                <h4 class="abrilFont mb-4">Mina grupper</h4>
+                @foreach (var group in Model.GroupsOfCurrentUser)
+                {
+                    <div class="accordion" id="notification-accordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading_@group.Id">
+                                <button class="accordion-button collapsed blueBgColor"
+                                        type="submit"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapse_@group.Id"
+                                        aria-expanded="false"
+                                        aria-controls="collapse_@group.Id">
+                                    <i class="bi bi-circle-fill pinkFontColor p-2"></i>
+                                    <span class="fw-bold">@group.Name</span>
+                                </button>
+                            </h2>
 
+                            <div id="collapse_@group.Id" class="accordion-collapse collapse blueBgColor" aria-labelledby="heading_@group.Id" data-bs-parent="#notification-accordion">
+                                <div class="accordion-body">
+                                    @{
+                                        var members = await _groupService.GetMembers(group.Id);
+                                        await Html.RenderPartialAsync("_MemberPartial", members);
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
 
-            <img class="mx-auto" src="img/matlag.png" />
+            <div class="w-50">
 
-            <form method="post">
-                <label class="form-label">Skapa ny matlagsinbjudan</label>
-                <select class="form-control w-25" asp-for="NewInvitation.GroupId" asp-items="ViewBag.GroupId">
-                    <option disabled selected>Välj grupp</option>
-                </select>
-                <label class="form-label">Vad ska du bjuda på?</label>
-                <input class="form-control" asp-for="NewInvitation.Course" />
-                <label class="form-label">Vilket datum?</label>
-                <input class="form-control" asp-for="NewInvitation.DateTime" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm", new System.Globalization.CultureInfo("sv-SE"))" />
-                <label class="form-label">Var ska ni vara?</label>
-                <input class="form-control" asp-for="NewInvitation.Location" />
-                <label class="form-label">Övrig information</label>
-                <textarea class="form-control" asp-for="NewInvitation.Message"></textarea>
-                <input type="submit" class="btn btn-primary" value="Spara" />
-            </form>
+                <form method="post">
+                    <h4 class="abrilFont my-4">Skapa ny matlagsinbjudan</h4>
+                    <label class="form-label fw-bold mt-2">Vilken grupp?*</label>
+                    <select class="form-control w-25 bg-transparent" asp-for="NewInvitation.GroupId" asp-items="ViewBag.GroupId">
+                        <option disabled selected>Välj grupp</option>
+                    </select>
+                    <label class="form-label fw-bold mt-2">Vilket datum och tid?*</label>
+                    <input required class="form-control bg-transparent" asp-for="NewInvitation.DateTime" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm", new System.Globalization.CultureInfo("sv-SE"))" />
+                    <label class="form-label fw-bold mt-2">Vad ska du bjuda på?</label>
+                    <input class="form-control bg-transparent" asp-for="NewInvitation.Course" />
+                    <label class="form-label fw-bold mt-2">Var ska ni vara?</label>
+                    <input class="form-control bg-transparent" asp-for="NewInvitation.Location" />
+                    <label class="form-label fw-bold mt-2">Övrig information</label>
+                    <textarea class="form-control bg-transparent" asp-for="NewInvitation.Message"></textarea>
+                    <input type="submit" class="btn pinkBgColor fw-bold mt-2" value="Spara" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row d-flex m-5">
+        <blockquote class="blockquote">
+            <h2 class="text-center abrilFont">"It takes a village to raise a child"</h2>
+            <footer class="blockquote-footer text-center mt-1">Afrikanskt ordspråk</footer>
+        </blockquote>
+
     </div>
 }

@@ -20,8 +20,10 @@ namespace ItTakesAVillage.Pages
         [BindProperty]
         public DinnerInvitation NewInvitation { get; set; } = new DinnerInvitation();
         public ItTakesAVillageUser? CurrentUser { get; set; }
+        public List<Models.Group?> GroupsOfCurrentUser { get; set; } = new List<Group?>();
 
-        public DinnerInvitationModel(IDinnerInvitationService dinnerInvitationService, 
+
+        public DinnerInvitationModel(IDinnerInvitationService dinnerInvitationService,
             UserManager<ItTakesAVillageUser> userManager,
             INotificationService notificationService,
             IGroupService groupService)
@@ -35,8 +37,13 @@ namespace ItTakesAVillage.Pages
         public async Task<IActionResult> OnGet()
         {
             CurrentUser = await _userManager.GetUserAsync(User);
-            if(CurrentUser != null)
+            if (CurrentUser != null)
+            {
                 ViewData["GroupId"] = new SelectList(await _groupService.GetGroupsByUserId(CurrentUser.Id), "Id", "Name");
+                GroupsOfCurrentUser = await _groupService.GetGroupsByUserId(CurrentUser.Id);
+                ViewData["GroupId"] = new SelectList(GroupsOfCurrentUser, "Id", "Name");
+            }
+
             return Page();
         }
 
@@ -48,9 +55,9 @@ namespace ItTakesAVillage.Pages
                 if (CurrentUser != null)
                 {
                     NewInvitation.CreatorId = CurrentUser.Id;
-                    bool success = await _dinnerInvitationService.Create(NewInvitation);                    
-                    if(success)
-                        await _notificationService.NotifyGroupAsync(NewInvitation);                                       
+                    bool success = await _dinnerInvitationService.Create(NewInvitation);
+                    if (success)
+                        await _notificationService.NotifyGroupAsync(NewInvitation);
                 }
             }
             return RedirectToPage("/DinnerInvitation");
