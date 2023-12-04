@@ -18,6 +18,8 @@ html {
 }
 body {
     margin-bottom: 60px;
+    font-family: 'Abril Fatface', serif;
+    font-family: 'Source Serif 4', serif;
 }
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Source+Serif+4:opsz@8..60&display=swap');
