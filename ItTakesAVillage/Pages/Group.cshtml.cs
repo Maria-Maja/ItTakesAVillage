@@ -18,8 +18,10 @@ namespace ItTakesAVillage.Pages
         public Models.Group NewGroup { get; set; } = new Models.Group();
         [BindProperty]
         public UserGroup NewUserGroup { get; set; } = new UserGroup();
+        public List<Models.Group?> GroupsOfCurrentUser { get; set; }
+        public List<UserGroup> GroupMembers { get; set; } = []; //new();
 
-        public GroupModel(IGroupService groupService,UserManager<ItTakesAVillageUser> userManager)
+        public GroupModel(IGroupService groupService, UserManager<ItTakesAVillageUser> userManager)
         {
             _groupService = groupService;
             _userManager = userManager;
@@ -27,9 +29,14 @@ namespace ItTakesAVillage.Pages
         public async Task<IActionResult> OnGet()
         {
             CurrentUser = await _userManager.GetUserAsync(User);
-            ViewData["UserId"] = new SelectList(_userManager.Users, "Id", "Email");
-            if(CurrentUser != null)
-                ViewData["GroupId"] = new SelectList(await _groupService.GetGroupsByUserId(CurrentUser.Id), "Id", "Name");
+            if (CurrentUser != null)
+            {
+                var allUsers = _userManager.Users.Where(x => x.Id != CurrentUser.Id).ToList();
+                ViewData["UserId"] = new SelectList(allUsers, "Id", "Email");
+                GroupsOfCurrentUser = await _groupService.GetGroupsByUserId(CurrentUser.Id);
+                ViewData["GroupId"] = new SelectList(GroupsOfCurrentUser, "Id", "Name");
+                
+            }
             return Page();
         }
         public async Task<IActionResult> OnPostNewGroupAsync()
