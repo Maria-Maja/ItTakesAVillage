@@ -23,7 +23,7 @@ namespace ItTakesAVillage.Services
             _notificationRepository = notificationRepository;
         }
 
-        public async Task<List<Notification>> GetAsync(string userId) => await _notificationRepository.GetByFilterAsync(x => x.UserId == userId);
+        public async Task<List<Notification>> GetAsync(string userId) => await _notificationRepository.GetByFilterAsync(x => x.UserId == userId && x.RelatedEvent.DateTime > DateTime.Now);
         public async Task<int> CountAsync(string userId)
         {
             var result = await _notificationRepository.GetByFilterAsync(x => x.UserId == userId && x.IsRead == false);
