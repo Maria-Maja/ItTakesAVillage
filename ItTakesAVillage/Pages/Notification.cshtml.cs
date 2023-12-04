@@ -35,16 +35,17 @@ namespace ItTakesAVillage.Pages
             if (CurrentUser != null)
                 Notifications = await _notificationService.GetAsync(CurrentUser.Id);
 
-
             return Page();
         }
-        public async Task <IActionResult> OnPostHandleAccordionClick([FromBody] int notificationId)
+        public async Task<IActionResult> OnPostHandleAccordionClick([FromBody] int notificationId)
         {
-            if (notificationId != 0)
+            CurrentUser = await _userManager.GetUserAsync(User);
+            if (notificationId != 0 && CurrentUser != null)
             {
-                await _notificationService.UpdateIsReadAsync(notificationId); 
+                await _notificationService.UpdateIsReadAsync(notificationId);
+                int unreadNotificationCount = await _notificationService.CountAsync(CurrentUser.Id);
 
-                return new JsonResult(new { success = true });
+                return new JsonResult(new { success = true, unreadCount = unreadNotificationCount });
             }
 
             return new JsonResult(new { success = false });
