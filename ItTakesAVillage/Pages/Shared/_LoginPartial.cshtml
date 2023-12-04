@@ -15,7 +15,7 @@
         int unreadNotifications = await notificationService.CountAsync(user.Id);
 
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Notification">
+            <a id="notification-link" class="nav-link text-dark" asp-page="/Notification">
                 <i class="bi bi-bell"></i>
                 @if (unreadNotifications > 0)
                 {
