@@ -31,5 +31,6 @@ public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
 
         builder.Entity<UserGroup>().Navigation(x => x.Group).AutoInclude();
         builder.Entity<UserGroup>().Navigation(x => x.User).AutoInclude();
+        builder.Entity<Notification>().Navigation(x => x.RelatedEvent).AutoInclude();
     }
 }

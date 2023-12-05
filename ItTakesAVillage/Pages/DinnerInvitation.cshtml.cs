@@ -21,6 +21,8 @@ namespace ItTakesAVillage.Pages
         public DinnerInvitation NewInvitation { get; set; } = new DinnerInvitation();
         public ItTakesAVillageUser? CurrentUser { get; set; }
         public List<Models.Group?> GroupsOfCurrentUser { get; set; } = new List<Group?>();
+        public List<Notification> Notifications { get; set; } = new();
+
 
 
         public DinnerInvitationModel(IDinnerInvitationService dinnerInvitationService,
@@ -42,6 +44,7 @@ namespace ItTakesAVillage.Pages
                 ViewData["GroupId"] = new SelectList(await _groupService.GetGroupsByUserId(CurrentUser.Id), "Id", "Name");
                 GroupsOfCurrentUser = await _groupService.GetGroupsByUserId(CurrentUser.Id);
                 ViewData["GroupId"] = new SelectList(GroupsOfCurrentUser, "Id", "Name");
+                Notifications = await _notificationService.GetAsync(CurrentUser.Id);
             }
 
             return Page();
