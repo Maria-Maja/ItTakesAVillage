@@ -16,11 +16,14 @@
             <button type="button" class="btn greenBgColor dropdown-toggle" data-bs-toggle="dropdown">
                 Meny
             </button>
-            <ul class="dropdown-menu greenBgColor">
-                <li><a class="dropdown-item" asp-page="/Group">Skapa grupper</a></li>
-                <li><a class="dropdown-item" asp-page="/DinnerInvitation">Skapa matlagsinbjudan</a></li>
+            <ul class="dropdown-menu dropdown-menu-end greenBgColor">
+                <li><a class="dropdown-item" asp-page="/Group">Grupper</a></li>
+                <li><a class="dropdown-item" asp-page="/DinnerInvitation">Matlag</a></li>
+                <li><a class="dropdown-item" asp-page="/PlayDate">Lekträffar</a></li>
+                <li><a class="dropdown-item" asp-page="/ToolPool">Prylpool</a></li>
+                <li><a class="dropdown-item" asp-page="/Notification">På gång</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" asp-page="/Account/Manage/Index">Mitt konto</a></li>
+                <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Mitt konto</a></li>
             </ul>
         </div>
 
@@ -37,7 +40,6 @@
         <li class="nav-item">
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
                 <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0" data-bs-toggle="tooltip" title="Logga ut"><i class="bi bi-door-open"></i></button>
-                @* TODO: Tooltip *@
             </form>
         </li>
     }
