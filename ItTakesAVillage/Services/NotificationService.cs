@@ -24,7 +24,7 @@ namespace ItTakesAVillage.Services
         }
 
         public async Task<List<Notification>> GetAsync(string userId) 
-            => await _notificationRepository.GetByFilterAsync(x => x.UserId == userId && x.RelatedEvent.DateTime > DateTime.Now);
+            => await _notificationRepository.GetByFilterAsync(x => x.UserId == userId && x.RelatedEvent.DateTime.Date >= DateTime.Now.Date);
         public async Task<int> CountAsync(string userId)
         {
             var result = await _notificationRepository.GetByFilterAsync(x => x.UserId == userId && x.IsRead == false);
