@@ -13,10 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Source+Serif+4:opsz@8..60&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="fontColor">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light box-shadow mb-3">
-            <div class="container">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white box-shadow mb-3">
+            <div class="container-fluid ms-4 me-2">
                 <a class="navbar-brand" asp-area="" asp-page="/Index"><img class="navbar-logo" src="img/logo.png" /></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -24,13 +24,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/Group">Skapa grupper</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/DinnerInvitation">Skapa matlagsinbjudan</a>
-                        </li>
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
