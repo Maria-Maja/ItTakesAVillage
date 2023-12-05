@@ -47,3 +47,17 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
 })
 //#endregion
+
+//#region ValidateSelectList    
+    function validateSelection() {
+        var selectedValue1 = document.getElementById("selectList1").value;
+        var selectedValue2 = document.getElementById("selectList2").value;
+
+        if (selectedValue1 === "" || selectedValue2 === "") {
+            alert("Vänligen välj ett alternativ från varje lista.");
+        } else {
+
+            document.forms[0].submit();
+        }
+    }
+//#endregion ValidateSelectList
