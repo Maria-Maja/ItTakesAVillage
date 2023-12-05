@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Source+Serif+4:opsz@8..60&display=swap');
 html {
     font-size: 14px;
 }
@@ -21,8 +23,10 @@ body {
     font-family: 'Abril Fatface', serif;
     font-family: 'Source Serif 4', serif;
 }
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Source+Serif+4:opsz@8..60&display=swap');
+.navbar-logo {
+    max-width: 5rem;
+}
+
 .abrilFont {
     font-family: 'Abril Fatface', serif;
 }
@@ -39,4 +43,8 @@ body {
 .pinkBgColor {
     background-color: rgb(221, 172, 172, 0.3);
 }
+.fontColor {
+    color: rgb(23, 64, 56);
+}
+
 

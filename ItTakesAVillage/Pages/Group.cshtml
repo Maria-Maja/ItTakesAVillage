@@ -65,7 +65,7 @@
                 <form method="post" asp-page-handler="AddUserToGroup">
                     <label class="form-label abrilFont">Lägg till medlem i grupp</label>
                     <div class="d-flex w-50 gap-2">
-
+                        @* TODO: Fixa requiered på selectlist *@
                         <select class="form-control col bg-transparent" asp-for="NewUserGroup.GroupId" asp-items="ViewBag.GroupId" required>
                             <option disabled selected>Välj grupp</option>
                         </select>

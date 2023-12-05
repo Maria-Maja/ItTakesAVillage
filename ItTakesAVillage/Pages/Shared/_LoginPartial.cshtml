@@ -12,10 +12,21 @@
 <ul class="navbar-nav">
     @if (user != null)
     {
-        int unreadNotifications = await notificationService.CountAsync(user.Id);
+        <div class="dropdown mx-2">
+            <button type="button" class="btn greenBgColor dropdown-toggle" data-bs-toggle="dropdown">
+                Meny
+            </button>
+            <ul class="dropdown-menu greenBgColor">
+                <li><a class="dropdown-item" asp-page="/Group">Skapa grupper</a></li>
+                <li><a class="dropdown-item" asp-page="/DinnerInvitation">Skapa matlagsinbjudan</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" asp-page="/Account/Manage/Index">Mitt konto</a></li>
+            </ul>
+        </div>
 
+        int unreadNotifications = await notificationService.CountAsync(user.Id);
         <li class="nav-item">
-            <a id="notification-link" class="nav-link text-dark" asp-page="/Notification">
+            <a id="notification-link" class="nav-link" asp-page="/Notification">
                 <i class="bi bi-bell"></i>
                 @if (unreadNotifications > 0)
                 {
@@ -24,21 +35,19 @@
             </a>
         </li>
         <li class="nav-item">
-            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-        </li>
-        <li class="nav-item">
             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0" data-bs-toggle="tooltip" title="Logga ut"><i class="bi bi-door-open"></i></button>
+                @* TODO: Tooltip *@
             </form>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Registrera</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Logga in</a>
         </li>
     }
 </ul>
