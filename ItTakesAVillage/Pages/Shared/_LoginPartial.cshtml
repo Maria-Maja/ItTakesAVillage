@@ -21,15 +21,15 @@
                 <li><a class="dropdown-item" asp-page="/DinnerInvitation">Matlag</a></li>
                 <li><a class="dropdown-item" asp-page="/PlayDate">Lekträffar</a></li>
                 <li><a class="dropdown-item" asp-page="/ToolPool">Prylpool</a></li>
-                <li><a class="dropdown-item" asp-page="/Notification">På gång</a></li>
                 <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" asp-page="/Notification">På gång</a></li>
                 <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Mitt konto</a></li>
             </ul>
         </div>
 
         int unreadNotifications = await notificationService.CountAsync(user.Id);
         <li class="nav-item">
-            <a id="notification-link" class="nav-link" asp-page="/Notification">
+            <a id="notification-link" class="nav-link" asp-page="/Notification" data-bs-toggle="tooltip" title="Notiser">
                 <i class="bi bi-bell"></i>
                 @if (unreadNotifications > 0)
                 {
