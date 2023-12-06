@@ -27,7 +27,8 @@ public class ItTakesAVillageContext : IdentityDbContext<ItTakesAVillageUser>
        .ToTable("Events")
        .HasDiscriminator<string>("EventType")
        .HasValue<BaseEvent>("BaseEvent")
-       .HasValue<DinnerInvitation>("DinnerInvitation");
+       .HasValue<DinnerInvitation>("DinnerInvitation")
+       .HasValue<PlayDate>("PlayDate");
 
         builder.Entity<UserGroup>().Navigation(x => x.Group).AutoInclude();
         builder.Entity<UserGroup>().Navigation(x => x.User).AutoInclude();
