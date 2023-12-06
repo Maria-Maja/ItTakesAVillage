@@ -52,3 +52,25 @@ body {
     background-color: rgba(180, 210, 234,0.3);
 }
 
+.custom-margin{
+    margin-top: 5rem;
+    margin-right:15rem;
+    margin-left: 15rem;
+}
+
+a {
+    color: rgb(23, 64, 56);
+    text-decoration:none;
+}
+a:hover{
+    color:gray;
+    
+}
+.eventImg {
+    height: 150px;
+}
+
+.custom-btn{
+    min-width:12rem;
+}
+

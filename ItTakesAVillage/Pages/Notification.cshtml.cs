@@ -12,19 +12,16 @@ namespace ItTakesAVillage.Pages
     {
         private readonly UserManager<ItTakesAVillageUser> _userManager;
         private readonly INotificationService _notificationService;
-        private readonly IDinnerInvitationService _dinnerInvitationService;
 
         public ItTakesAVillageUser? CurrentUser { get; set; }
         [BindProperty]
         public int NotificationId { get; set; }
         public List<Notification> Notifications { get; set; } = new();
         public NotificationModel(UserManager<ItTakesAVillageUser> userManager,
-            INotificationService notificationService,
-            IDinnerInvitationService dinnerInvitationService)
+            INotificationService notificationService)
         {
             _userManager = userManager;
             _notificationService = notificationService;
-            _dinnerInvitationService = dinnerInvitationService;
         }
         public async Task<IActionResult> OnGetAsync()
         {
