@@ -7,11 +7,7 @@
 }
 @if (Model.CurrentUser != null)
 {
-
-
-    <div class="row d-flex m-5">
-        <h2 class="text-center abrilFont">Samla dina vänner och börja hjälpas åt!</h2>
-    </div>
+    <h2 class="text-center abrilFont">Samla dina vänner och börja hjälpas åt!</h2>
     <div class="greenBgColor p-5">
         <div class="container w-75">
             <h4 class="mt-2 mb-5 abrilFont">Kom igång idag och skapa en grupp!</h4>
@@ -24,8 +20,6 @@
                            asp-for="NewGroup.Name" />
                     <input type="submit" class="btn col-2 pinkBgColor fw-bold" value="Spara" />
                 </div>
-
-
             </form>
 
             @if (Model.GroupsOfCurrentUser != null && Model.GroupsOfCurrentUser.Any())
@@ -61,7 +55,6 @@
                     }
                 </div>
 
-
                 <form method="post" asp-page-handler="AddUserToGroup">
                     <label class="form-label abrilFont">Lägg till medlem i grupp</label>
                     <div class="d-flex w-50 gap-2">
@@ -78,5 +71,5 @@
             }
         </div>
     </div>
-    <partial name="Shared/_FooterQuote"/>
+    <partial name="Shared/_FooterQuote" />
 }

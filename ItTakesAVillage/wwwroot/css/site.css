@@ -43,15 +43,17 @@ body {
 .pinkBgColor {
     background-color: rgb(221, 172, 172, 0.3);
 }
-.fontColor {
+.fontColor, input{
     color: rgb(23, 64, 56);
 }
-
 
 .blueBgColor {
     background-color: rgba(180, 210, 234,0.3);
 }
-
+#registerImg {
+    max-height: 100% !important;
+    max-width: 100%;
+}
 .custom-margin{
     margin-top: 5rem;
     margin-right:15rem;
@@ -73,4 +75,3 @@ a:hover{
 .custom-btn{
     min-width:12rem;
 }
-
