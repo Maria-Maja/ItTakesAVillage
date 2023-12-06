@@ -2,10 +2,38 @@
 @model ItTakesAVillage.Pages.PlayDateModel
 @{
 }
-@if(Model.CurrentUser != null)
+@if (Model.CurrentUser != null)
 {
     <div class="d-flex align-items-center flex-column">
-        <img class="mx-auto" src="~/img/playdate.png "/>
+        <img class="mx-auto" src="~/img/playdate-img.png " />
         <h2 class="abrilFont text-center mt-2 mb-5">Lekträff</h2>
     </div>
+
+
+    <div class="greenBgColor py-4">
+        <div class="container w-75">
+            <h4 class="abrilFont mt-4 mb-3">Skapa ny lekträffsinbjudan</h4>
+            <div class="w-50">
+                <form method="post">
+                    <label class="form-label fw-bold mt-2">Vilken grupp?*</label>
+                    <select class="form-control w-25 bg-transparent" asp-for="NewPlayDate.GroupId" asp-items="ViewBag.GroupId">
+                        <option disabled selected>Välj grupp</option>
+                    </select>
+                    <label class="form-label fw-bold mt-2">Vilket datum och tid?*</label>
+                    <input required class="form-control bg-transparent" asp-for="NewPlayDate.DateTime" value="@DateTime.Now.ToString("yyyy-MM-dd HH:mm", new System.Globalization.CultureInfo("sv-SE"))" />
+                    <label class="form-label fw-bold mt-2">Vem vill leka?</label>
+                    <input class="form-control bg-transparent" asp-for="NewPlayDate.ChildName" />
+                    <label class="form-label fw-bold mt-2">Vem vill barnet leka med?</label>
+                    <input class="form-control bg-transparent" asp-for="NewPlayDate.InvitedChildName" />
+                    <label class="form-label fw-bold mt-2">Var ska ni vara?</label>
+                    <input class="form-control bg-transparent" asp-for="NewPlayDate.Location" />
+                    <label class="form-label fw-bold mt-2">Övrig information</label>
+                    <textarea class="form-control bg-transparent" asp-for="NewPlayDate.Message"></textarea>
+                    <input type="submit" class="btn pinkBgColor fw-bold mt-2" value="Spara" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <partial name="_FooterQuote" />
 }
