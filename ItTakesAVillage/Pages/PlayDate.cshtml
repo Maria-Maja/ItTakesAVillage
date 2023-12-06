@@ -2,5 +2,10 @@
 @model ItTakesAVillage.Pages.PlayDateModel
 @{
 }
-<h2 class="abrilFont">Lekträffar på gång...</h2>
-<p>Det blir kul!</p>
+@if(Model.CurrentUser != null)
+{
+    <div class="d-flex align-items-center flex-column">
+        <img class="mx-auto" src="~/img/playdate.png "/>
+        <h2 class="abrilFont text-center mt-2 mb-5">Lekträff</h2>
+    </div>
+}
