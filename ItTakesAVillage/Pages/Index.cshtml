@@ -30,10 +30,10 @@
 <div class="text-center m-5">
     <a asp-page="/Group" class="btn custom-btn fontColor fw-bold blueBgColor">Skapa ny grupp</a>
 </div>
-@if (Model.Notifications != null)
+
+@if (Model.Notifications != null && Model.Notifications.Any())
 {
     <div class="border border-start-0 border-end-0 py-5">
-
         <div class="container">
             <h4 class="abrilFont px-4">På gång</h4>
             <div class="mx-auto d-flex justify-content-center">

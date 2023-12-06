@@ -18,7 +18,7 @@ namespace ItTakesAVillage.Pages
         public Models.Group NewGroup { get; set; } = new Models.Group();
         [BindProperty]
         public UserGroup NewUserGroup { get; set; } = new UserGroup();
-        public List<Models.Group?> GroupsOfCurrentUser { get; set; }
+        public List<Models.Group?> GroupsOfCurrentUser { get; set; } = new();
 
         public GroupModel(IGroupService groupService, UserManager<ItTakesAVillageUser> userManager)
         {
