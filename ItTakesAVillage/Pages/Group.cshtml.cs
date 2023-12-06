@@ -49,7 +49,7 @@ namespace ItTakesAVillage.Pages
 
                 if (newGroupId != 0)
                 {
-                    await _groupService.AddUser(CurrentUser.Id, newGroupId); //TODO lägg till toast för success/ not success
+                    await _groupService.AddUser(CurrentUser.Id, newGroupId); 
                 }
             }
             return RedirectToPage("/Group");
