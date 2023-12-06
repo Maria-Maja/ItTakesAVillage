@@ -75,3 +75,6 @@ a:hover{
 .custom-btn{
     min-width:12rem;
 }
+.customColouredContainer{
+    min-height: 16rem;
+}
