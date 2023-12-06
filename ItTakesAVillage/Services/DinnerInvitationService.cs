@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ItTakesAVillage.Services
 {
-    public class DinnerInvitationService : IDinnerInvitationService
+    public class DinnerInvitationService : IEventService<DinnerInvitation>
     {
         private readonly IRepository<DinnerInvitation> _dinnerInvitationRepository;
 

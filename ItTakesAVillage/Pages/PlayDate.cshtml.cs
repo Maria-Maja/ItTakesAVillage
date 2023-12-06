@@ -12,18 +12,22 @@ namespace ItTakesAVillage.Pages
         private readonly UserManager<ItTakesAVillageUser> _userManager;
         private readonly IGroupService _groupService;
         private readonly INotificationService _notificationService;
+        private readonly IEventService<PlayDate> _playDateService;
 
         public ItTakesAVillageUser? CurrentUser { get; set; }
-        public PlayDate NewPlayDate { get; set; } = new PlayDate();
-        public List<Notification> Notifications { get; set; }
-        public List<Models.Group?> GroupsOfCurrentUser { get; set; } = new List<Group?>();
+        [BindProperty]
+        public PlayDate NewPlayDate { get; set; } = new();
+        public List<Notification> Notifications { get; set; } = new();
+        public List<Models.Group?> GroupsOfCurrentUser { get; set; } = new();
         public PlayDateModel(UserManager<ItTakesAVillageUser> userManager,
             IGroupService groupService,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IEventService<PlayDate> playDateService)
         {
             _userManager = userManager;
             _groupService = groupService;
             _notificationService = notificationService;
+            _playDateService = playDateService;
         }
         public async Task<IActionResult> OnGet()
         {
@@ -36,6 +40,20 @@ namespace ItTakesAVillage.Pages
                 Notifications = await _notificationService.GetAsync(CurrentUser.Id);
             }
             return Page();
+        }
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (ModelState.IsValid)
+            {
+                CurrentUser = await _userManager.GetUserAsync(User);
+                if (CurrentUser != null)
+                {
+                    NewPlayDate.CreatorId = CurrentUser.Id;
+                    bool success = await _playDateService.Create(NewPlayDate);
+                        //TODO: If success lägg till i notifications
+                }
+            }
+            return RedirectToPage("/PlayDate");
         }
     }
 }
