@@ -78,3 +78,7 @@ a:hover{
 .customColouredContainer{
     min-height: 16rem;
 }
+.register{
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
