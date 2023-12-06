@@ -7,10 +7,10 @@
 
 @if (Model.CurrentUser != null)
 {
-    if (Model.Notifications.Any())
+    <h2 class="abrilFont text-center m-5">På gång</h2>
+    @if (Model.Notifications.Any())
     {
-        <h2 class="abrilFont text-center m-5">På gång</h2>
-        <div class="greenBgColor p-5">
+        <div class="greenBgColor py-5">
             <div class="container mx-auto d-flex justify-content-center">
                 <div class="accordion w-75 " id="notification-accordion">
                     @foreach (var notification in Model.Notifications.OrderBy(x => x.RelatedEvent.DateTime))
@@ -47,5 +47,14 @@
             </div>
         </div>
     }
-  <partial name="_FooterQuote" />
+    else
+    {
+        <div class="greenBgColor py-4 customColouredContainer d-flex align-items-center justify-content-center">
+            <div class="container d-flex flex-column align-items-center">
+                <h4 class="abrilFont my-4">Ingenting på gång just nu..</h4>
+                <a asp-page="/Group" class="btn custom-btn fontColor fw-bold pinkBgColor my-4">Behöver du skapa en ny grupp?</a>
+            </div>
+        </div>
+    }
+    <partial name="_FooterQuote" />
 }
