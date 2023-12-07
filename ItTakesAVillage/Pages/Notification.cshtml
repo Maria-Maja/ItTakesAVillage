@@ -30,14 +30,14 @@
 
                             <div id="collapse_@notification.Id" class="accordion-collapse collapse" aria-labelledby="heading_@notification.Id" data-bs-parent="#notification-accordion">
                                 <div class="accordion-body greenBgColor p-4">
-                                    @if (notification.RelatedEvent is DinnerInvitation invitation)
+                                    @if (notification.RelatedEvent is DinnerInvitation dinnerInvitation)
                                     {
-                                        await Html.RenderPartialAsync("_DinnerNotificationPartial", invitation);
+                                        await Html.RenderPartialAsync("_DinnerNotificationPartial", dinnerInvitation);
                                     }
-                                    @* @if (notification.RelatedEvent is PlayDate invitation)
-                        {
-                        await Html.RenderPartialAsync("_PlayDateNotificationPartial", invitation);
-                        } *@
+                                    @if (notification.RelatedEvent is PlayDate playDate)
+                                    {
+                                        await Html.RenderPartialAsync("_PlayDateNotificationPartial", playDate);
+                                    }
 
                                 </div>
                             </div>
