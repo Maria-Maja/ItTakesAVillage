@@ -13,7 +13,8 @@ namespace ItTakesAVillage.Pages
     public class DinnerInvitationModel : PageModel
     {
         private readonly UserManager<ItTakesAVillageUser> _userManager;
-        private readonly IDinnerInvitationService _dinnerInvitationService;
+        //private readonly IDinnerInvitationService _dinnerInvitationService;
+        private readonly IEventService<DinnerInvitation> _dinnerInvitationService;
         private readonly INotificationService _notificationService;
         private readonly IGroupService _groupService;
 
@@ -25,7 +26,7 @@ namespace ItTakesAVillage.Pages
 
 
 
-        public DinnerInvitationModel(IDinnerInvitationService dinnerInvitationService,
+        public DinnerInvitationModel(IEventService<DinnerInvitation> dinnerInvitationService,
             UserManager<ItTakesAVillageUser> userManager,
             INotificationService notificationService,
             IGroupService groupService)
