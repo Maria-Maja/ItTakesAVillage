@@ -31,16 +31,18 @@ namespace ItTakesAVillage.Services
 
             return result.Count();
         }
-        public async Task NotifyGroupAsync(DinnerInvitation dinnerInvitation)
+        public async Task NotifyGroupAsync<TEvent>(TEvent invitation) where TEvent : BaseEvent
         {
-            var groupMembers = await _groupService.GetMembers(dinnerInvitation.GroupId);
+            var groupMembers = await _groupService.GetMembers(invitation.GroupId);
 
             if (!groupMembers.IsNullOrEmpty())
             {
                 foreach (var member in groupMembers)
                 {
                     if (member != null)
-                        await CreateAsync(dinnerInvitation, member.Id);
+                    {
+                        await CreateAsync(invitation, member.Id, GetCreatorIdFunction<TEvent>());
+                    }
                 }
             }
         }
@@ -55,17 +57,45 @@ namespace ItTakesAVillage.Services
                 await _notificationRepository.UpdateAsync(existingNotification);
             }
         }
-        public async Task CreateAsync(DinnerInvitation dinnerInvitation, string userId)
+
+        public async Task CreateAsync<TEvent>(TEvent invitation, string userId, Func<TEvent, string> creatorIdFunc) where TEvent : BaseEvent
         {
-            var creator = await _userRepository.GetAsync(dinnerInvitation.CreatorId);
+            var creatorId = creatorIdFunc(invitation);
+            var creator = await _userRepository.GetAsync(creatorId);
+            var eventtype = "";
+
+            if (invitation is DinnerInvitation)
+                eventtype = "Matlag";
+            if (invitation is PlayDate)
+                eventtype = "Lekträff";
+
+            var title = creator == null ? $"{eventtype} hos okänd" : $"{eventtype} hos {creator.FirstName} {creator.LastName}";
+
             var newNotification = new Notification
             {
                 UserId = userId,
-                Title = creator == null ? $"Matlag hos okänd" : $"Matlag hos {creator.FirstName} {creator.LastName}",
+                Title = title,
                 IsRead = false,
-                RelatedEvent = dinnerInvitation
+                RelatedEvent = invitation
             };
+
             await _notificationRepository.AddAsync(newNotification);
+        }
+        private Func<TEvent, string> GetCreatorIdFunction<TEvent>() where TEvent : BaseEvent
+        {
+            if (typeof(TEvent) == typeof(DinnerInvitation))
+            {
+                return (TEvent di) => di.CreatorId;
+
+            }
+            else if (typeof(TEvent) == typeof(PlayDate))
+            {
+                return (TEvent pd) => pd.CreatorId;
+            }
+            else
+            {
+                throw new ArgumentException($"Unsupported event type: {typeof(TEvent)}");
+            }
         }
     }
 }

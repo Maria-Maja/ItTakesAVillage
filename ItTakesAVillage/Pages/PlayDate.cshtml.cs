@@ -50,7 +50,8 @@ namespace ItTakesAVillage.Pages
                 {
                     NewPlayDate.CreatorId = CurrentUser.Id;
                     bool success = await _playDateService.Create(NewPlayDate);
-                        //TODO: If success lägg till i notifications
+                    if (success)
+                        await _notificationService.NotifyGroupAsync(NewPlayDate);
                 }
             }
             return RedirectToPage("/PlayDate");
