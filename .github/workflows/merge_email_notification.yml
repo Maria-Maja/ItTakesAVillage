@@ -9,26 +9,20 @@ jobs:
   send-email-notification:
     runs-on: ubuntu-latest
 
-    outputs:
-      id: check_merge
-      value: ${{ steps.check_merge.outputs.is_merged }}
-
     steps:
     - name: Check if merged to main
       id: check_merge
-      run: echo "is_merged=${{ github.event.pull_request.merged && github.event.pull_request.base.ref == 'true' }}"
-      
+      run: echo "is_merged=${{ github.event.pull_request.merged && github.event.pull_request.base.ref == 'main' }}"
+
     - name: Send Email Notification
-      if: steps.send-email-notification.outputs.is_merged == 'true'
-      uses: dawidd6/action-send-mail@v3.9.0
+      if: steps.check_merge.outputs.is_merged == 'true'
+      uses: dawidd6/action-send-mail@v3
       with:
-        server_address: ${{ secrets.EMAIL_SERVER }}
-        server_port: ${{ secrets.EMAIL_PORT }}
-        username: ${{ secrets.SENDER_EMAIL_USERNAME }}
-        password: ${{ secrets.SENDER_EMAIL_PASSWORD }}
+        connection_url: ${{ secrets.MAIL_CONNECTION }}
         subject: 'Merge to Main Alert'
         to: ${{ secrets.RECEIVER_EMAIL_USERNAME }}
-        from: ${{ secrets.SENDER_EMAIL_USERNAME }}
+        from: Luke Skywalker
         body: 'Someone has merged a pull request into the main branch. Check it on GitHub.'
+
 
    
