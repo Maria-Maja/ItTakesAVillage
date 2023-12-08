@@ -17,18 +17,20 @@ jobs:
 
       - name: Get Joke from API
         id: get_joke
-        run: echo "::set-output name=joke::$(curl -s "https://api.chucknorris.io/jokes/random")"
+        run: echo "::set-output name=joke::$(curl -s 'https://api.chucknorris.io/jokes/random')"
 
       - name: Add Joke to Pull Request
         run: |
           echo "## Joke of the Day" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
-          echo "${{ steps.get_joke.outputs.joke }}" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
-
+          joke="${{ steps.get_joke.outputs.joke }}"
+          escaped_joke=$(echo "$joke" | sed 's/\"/\\\"/g')
+          echo "$escaped_joke" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
+        
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout ${{ github.event.pull_request.head.ref }}
           git add $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
           git commit -m "Add joke to Pull Request"
           git push origin ${{ github.event.pull_request.head.ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
