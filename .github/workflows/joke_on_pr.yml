@@ -18,28 +18,29 @@ jobs:
       - name: Install jq
         run: sudo apt-get install jq -y
 
-      - name: Get Joke from API
-        id: get_joke
+      - name: Set up Git
         run: |
-          raw_output=$(curl -s 'https://api.chucknorris.io/jokes/random')
-          joke=$(echo "$raw_output" | jq -r '.value')
-          echo "::set-output name=joke::$joke"
-      
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Switch to feature/testjoke branch
+        run: git checkout ${{ github.event.pull_request.head.ref }}
+
+      - name: Fetch changes from origin
+        run: git fetch origin ${{ github.event.pull_request.head.ref }}
+
+      - name: Merge changes from origin
+        run: git merge origin/${{ github.event.pull_request.head.ref }}
+
       - name: Add Joke to Pull Request
         run: |
           echo "## Joke of the Day" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
-          echo "${{ steps.get_joke.outputs.joke }}" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
-      
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Ensure you are on the branch of the pull request
-          git checkout ${{ github.event.pull_request.head.ref }}
-          
+          echo "If you roundhouse kick Chuck Norris, Chuck Norris will say: \"Congratulations. You are my Roundhouse Kick buddy!\" If I were a Roundhouse Kick Buddy, I would go crazy! XD" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
+
           # Stage and commit changes
           git add $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
           git commit -m "Add joke to Pull Request"
-          
+
           # Push changes to the pull request branch
           git push origin ${{ github.event.pull_request.head.ref }}
         env:
