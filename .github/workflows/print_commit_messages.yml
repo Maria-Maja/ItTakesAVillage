@@ -17,6 +17,5 @@ jobs:
       - name: Print commit messages
         run: |
           PR_URL="${{ github.event.pull_request.html_url }}"
-          COMMITS=$(git log --pretty=format:"%h %s" ${{ github.event.before }}..${{ github.sha }})
           echo "Commit messages in PR: $PR_URL"
-          echo "$COMMITS"
+          git log --pretty=format:"- %h %s" ${{ github.event.before }}..${{ github.sha }}
