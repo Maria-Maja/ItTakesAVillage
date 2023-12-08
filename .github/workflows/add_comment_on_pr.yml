@@ -1,27 +1,20 @@
 name: Add Comment to Pull Request
 
-on:
-  pull_request:
-    branches: [ "*" ]
-      
+on: pull_request
 
 jobs:
-  add-comment:
+  comment:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-    - name: Set up GitHub CLI
-      uses: actions/setup-gh@v1
-      with:
-        cli_version: '2.x'
-
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Add comment to Pull Request
-      run: |
-        MESSAGE="Hello from your GitHub Actions Workflow!"
-        PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        
-        # Använd inbyggd GitHub Actions kommando för att kommentera
-        echo "$MESSAGE" | gh issue comment $PR_NUMBER
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
