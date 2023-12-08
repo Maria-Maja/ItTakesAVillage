@@ -2,7 +2,8 @@ name: Add Comment to Pull Request
 
 on:
   pull_request:
-    branches: [ "*" ]
+    types:
+      - opened
 
 jobs:
   add-comment:
@@ -16,9 +17,9 @@ jobs:
       run: |
         MESSAGE="Hello from your GitHub Actions Workflow!"
         PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-        API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments"
         
-        curl -X POST \
-          -H "Authorization: Bearer ${{ PERSONAL_ACCESS_TOKEN }}" \
-          -d "{\"body\":\"$MESSAGE\"}" \
-          "$API_URL"
+        # Använd inbyggd GitHub Actions login för att autentisera
+        gh auth login --with-token "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
+        
+        # Använd inbyggd GitHub Actions kommando för att kommentera
+        gh api repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments -f body="$MESSAGE"
