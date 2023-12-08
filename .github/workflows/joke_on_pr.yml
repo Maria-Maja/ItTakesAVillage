@@ -37,7 +37,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Ensure you are on the branch of the pull request
-          git checkout ${{ github.event.pull_request.head.ref }}
+          git checkout origin/${{ github.event.pull_request.head.ref }}
           
           # Stage and commit changes
           git add $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
