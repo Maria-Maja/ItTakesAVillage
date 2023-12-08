@@ -2,8 +2,7 @@ name: Add Comment to Pull Request
 
 on:
   pull_request:
-    types:
-      - opened
+    branches: [ "*" ]
 
 jobs:
   add-comment:
