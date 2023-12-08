@@ -12,15 +12,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Switch to the pull request branch
-        run: git checkout ${{ github.event.pull_request.head.ref }}
-
       - name: Create feature directory
         run: mkdir -p $GITHUB_WORKSPACE/feature
 
       - name: Get Joke from API
         id: get_joke
-        run: echo "::set-output name=joke::$(curl -s 'https://api.chucknorris.io/jokes/random')"
+        run: echo "::set-output name=joke::$(curl -s "https://api.chucknorris.io/jokes/random")"
 
       - name: Add Joke to Pull Request
         run: |
@@ -29,6 +26,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout ${{ github.event.pull_request.head.ref }}
           git add $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
           git commit -m "Add joke to Pull Request"
           git push origin ${{ github.event.pull_request.head.ref }}
