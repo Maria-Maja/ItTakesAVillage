@@ -134,7 +134,6 @@ namespace ItTakesAVillage.Tests
 
             _notificationRepositoryMock.Setup(x => x.GetAsync(nonExistentNotificationId))
                                       .ReturnsAsync(null as Notification);
-
             // Act
             await _sut.UpdateIsReadAsync(nonExistentNotificationId);
 
