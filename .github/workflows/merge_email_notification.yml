@@ -17,9 +17,7 @@ jobs:
     - name: Check if merged to main
       id: check_merge
       run: echo "is_merged=${{ github.event.pull_request.merged && github.event.pull_request.base.ref == 'true' }}"
-    - name: Log Before Send Email Notification
-      run: echo "Before Send Email Notification"
-
+      
     - name: Send Email Notification
       if: steps.send-email-notification.outputs.is_merged == 'true'
       uses: dawidd6/action-send-mail@v3.9.0
