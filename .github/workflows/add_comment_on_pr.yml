@@ -1,0 +1,25 @@
+name: Add Comment to Pull Request
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  add-comment:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4.1.1
+
+    - name: Add comment to Pull Request
+      run: |
+        MESSAGE="Hello from your GitHub Actions Workflow!"
+        PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+        API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments"
+        
+        curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -d "{\"body\":\"$MESSAGE\"}" \
+          "$API_URL"
