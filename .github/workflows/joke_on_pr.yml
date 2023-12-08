@@ -15,20 +15,32 @@ jobs:
       - name: Create feature directory
         run: mkdir -p $GITHUB_WORKSPACE/feature
 
+      - name: Install jq
+        run: sudo apt-get install jq -y
+
       - name: Get Joke from API
         id: get_joke
-        run: echo "::set-output name=joke::$(curl -s "https://api.chucknorris.io/jokes/random")"
-
+        run: |
+          raw_output=$(curl -s 'https://api.chucknorris.io/jokes/random')
+          joke=$(echo "$raw_output" | jq -r '.value')
+          echo "::set-output name=joke::$joke"
+      
       - name: Add Joke to Pull Request
         run: |
           echo "## Joke of the Day" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
           echo "${{ steps.get_joke.outputs.joke }}" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Ensure you are on the branch of the pull request
           git checkout ${{ github.event.pull_request.head.ref }}
+          
+          # Stage and commit changes
           git add $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
           git commit -m "Add joke to Pull Request"
+          
+          # Push changes to the pull request branch
           git push origin ${{ github.event.pull_request.head.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
