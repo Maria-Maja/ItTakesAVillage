@@ -17,7 +17,7 @@ jobs:
 
       - name: Get Joke from API
         id: get_joke
-        run: echo "::set-output name=joke::$(curl -s 'https://api.chucknorris.io/jokes/random')"
+        run: echo "::set-output name=joke::$(curl -s "https://api.chucknorris.io/jokes/random")"
 
       - name: Add Joke to Pull Request
         run: |
