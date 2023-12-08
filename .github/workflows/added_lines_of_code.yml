@@ -1,0 +1,26 @@
+name: Code Stats Workflow
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  code-stats:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v4.1.1
+
+    - name: Count added lines of code
+      id: code-stats
+      run: |
+        ADDED_LINES=$(git diff --shortstat $(git merge-base HEAD ${{ github.event.before }}) HEAD | grep "files changed" | awk '{print $4}')
+        echo "::set-output name=added_lines::$ADDED_LINES"
+
+    - name: Display code stats
+      run: |
+        ADDED_LINES="${{ steps.code-stats.outputs.added_lines }}"
+        echo "Antal tillagda rader kod i PR: $ADDED_LINES"
