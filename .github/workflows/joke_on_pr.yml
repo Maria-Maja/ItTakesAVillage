@@ -12,18 +12,21 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Get joke from API
+      - name: Create feature directory
+        run: mkdir -p $GITHUB_WORKSPACE/feature
+
+      - name: Get Joke from API
         id: get_joke
         run: echo "::set-output name=joke::$(curl -s 'https://api.chucknorris.io/jokes/random')"
 
-      - name: Add joke to Pull Request
+      - name: Add Joke to Pull Request
         run: |
-          echo "## Joke of the Day" >> $GITHUB_WORKSPACE/${{ github.event.pull_request.head.ref }}.md
-          echo "${{ steps.get_joke.outputs.joke }}" >> $GITHUB_WORKSPACE/${{ github.event.pull_request.head.ref }}.md
+          echo "## Joke of the Day" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
+          echo "${{ steps.get_joke.outputs.joke }}" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add $GITHUB_WORKSPACE/${{ github.event.pull_request.head.ref }}.md
+          git add $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
           git commit -m "Add joke to Pull Request"
           git push
         env:
