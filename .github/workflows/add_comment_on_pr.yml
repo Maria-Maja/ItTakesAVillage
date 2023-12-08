@@ -19,6 +19,6 @@ jobs:
         API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments"
         
         curl -X POST \
-          -H "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+          -H "Authorization: Bearer ${{ PERSONAL_ACCESS_TOKEN }}" \
           -d "{\"body\":\"$MESSAGE\"}" \
           "$API_URL"
