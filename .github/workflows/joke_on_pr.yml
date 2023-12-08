@@ -19,7 +19,7 @@ jobs:
         id: get_joke
         run: echo "::set-output name=joke::$(curl -s 'https://api.chucknorris.io/jokes/random')"
 
-      - name: Add Joke to Pull Request
+      - name: Add Joke to PR
         run: |
           echo "## Joke of the Day" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
           echo "${{ steps.get_joke.outputs.joke }}" >> $GITHUB_WORKSPACE/feature/createJokeWorkflow.md
