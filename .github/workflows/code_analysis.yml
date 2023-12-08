@@ -1,9 +1,10 @@
 name: Static code analysis with Sonar Cloud
 on:
-  pull_request:
   push:
     branches:
       - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
