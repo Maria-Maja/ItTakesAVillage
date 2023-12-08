@@ -1,0 +1,33 @@
+name: Add Comment to Pull Request
+
+on: pull_request
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+    - name: Install jq
+      run: |
+        sudo apt-get update -qy
+        sudo apt-get install -y jq
+      
+    - name: Get Joke from API
+      env:
+        JOKE: ${{ runner.token }}
+      run: |
+        export JOKE=$(curl -s "https://api.chucknorris.io/jokes/random" | jq -r '.value')
+        echo "JOKE=$JOKE" >> $GITHUB_ENV
+        
+    - name: Add Comment
+      uses: actions/github-script@v6
+      with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Dagens skämt: ' + process.env.JOKE
+            })
