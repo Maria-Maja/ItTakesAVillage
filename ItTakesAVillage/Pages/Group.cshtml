@@ -2,9 +2,7 @@
 @using ItTakesAVillage.Contracts
 @inject IGroupService _groupService
 @model ItTakesAVillage.Pages.GroupModel
-@{
 
-}
 @if (Model.CurrentUser != null)
 {
     <h2 class="text-center abrilFont m-5">Samla dina vänner och börja hjälpas åt!</h2>
@@ -13,7 +11,6 @@
     {
         await Html.RenderPartialAsync("_MemberPartial", Model.GroupsOfCurrentUser);
     }
-
     <div class="greenBgColor py-5">
         <div class="container w-75">
             <h4 class="mt-2 mb-5 abrilFont">Kom igång idag och skapa en grupp!</h4>
