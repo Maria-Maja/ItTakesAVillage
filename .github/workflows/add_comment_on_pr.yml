@@ -2,8 +2,7 @@ name: Add Comment to Pull Request
 
 on:
   pull_request:
-    types:
-      - opened
+    branches: [ "*" ]
 
 jobs:
   add-comment:
@@ -11,7 +10,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4.1.1
+      uses: actions/checkout@v2
 
     - name: Add comment to Pull Request
       run: |
@@ -20,6 +19,6 @@ jobs:
         API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments"
         
         curl -X POST \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
           -d "{\"body\":\"$MESSAGE\"}" \
           "$API_URL"
