@@ -1,0 +1,30 @@
+name: Add joke to pull request
+
+on:
+  pull_request:
+    types: opened
+
+jobs:
+  add_joke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Get joke from API
+        id: get_joke
+        run: echo "::set-output name=joke::$(curl -s 'https://api.chucknorris.io/jokes/random')"
+
+      - name: Add joke to PR
+        run: |
+          echo "## Joke of the Day" >> $GITHUB_WORKSPACE/${{ github.event.pull_request.head.ref }}.md
+          echo "${{ steps.get_joke.outputs.joke }}" >> $GITHUB_WORKSPACE/${{ github.event.pull_request.head.ref }}.md
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add $GITHUB_WORKSPACE/${{ github.event.pull_request.head.ref }}.md
+          git commit -m "Add joke to Pull Request"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
