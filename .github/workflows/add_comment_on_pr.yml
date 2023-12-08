@@ -3,12 +3,18 @@ name: Add Comment to Pull Request
 on:
   pull_request:
     branches: [ "*" ]
+      
 
 jobs:
   add-comment:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Set up GitHub CLI
+      uses: actions/setup-gh@v1
+      with:
+        cli_version: '2.x'
+
     - name: Checkout code
       uses: actions/checkout@v2
 
@@ -17,8 +23,5 @@ jobs:
         MESSAGE="Hello from your GitHub Actions Workflow!"
         PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
         
-        # Använd inbyggd GitHub Actions login för att autentisera
-        gh auth login --with-token "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
-        
         # Använd inbyggd GitHub Actions kommando för att kommentera
-        gh api repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments -f body="$MESSAGE"
+        echo "$MESSAGE" | gh issue comment $PR_NUMBER
