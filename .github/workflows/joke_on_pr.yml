@@ -41,6 +41,6 @@ jobs:
           git commit -m "Add joke to Pull Request"
           
           # Push changes to the pull request branch
-          git push origin ${{ github.event.pull_request.head.ref }}
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
