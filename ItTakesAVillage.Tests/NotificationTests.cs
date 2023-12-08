@@ -68,45 +68,45 @@ namespace ItTakesAVillage.Tests
             _notificationRepositoryMock.Verify(x => x.GetByFilterAsync(It.IsAny<Expression<Func<Notification, bool>>>()), Times.Once);
         }
 
-        //[Fact]
-        //public async Task CreateAsync_CreatorExists_ShouldAddNotificationWithCreatorName()
-        //{
-        //    // Arrange
-        //    var dinnerInvitation = new DinnerInvitation { CreatorId = "creatorId" };
-        //    var userId = "testUserId";
-        //    var creator = new ItTakesAVillageUser { Id = dinnerInvitation.CreatorId, FirstName = "John", LastName = "Doe" };
+        [Theory]
+        [MemberData(nameof(DinnerInvitationTestDataExistingCreator))]
+        [MemberData(nameof(PlayDateTestDataExistingCreator))]
+        public async Task CreateAsync_CreatorExists_ShouldAddNotificationWithCreatorName<TEventObject>(TEventObject eventObject, string userId, ItTakesAVillageUser creator)
+        where TEventObject : BaseEvent
+        {
+            // Arrange
+            _userRepositoryMock.Setup(x => x.GetAsync(eventObject.CreatorId))
+                               .ReturnsAsync(creator);
 
-        //    _userRepositoryMock.Setup(x => x.GetAsync(dinnerInvitation.CreatorId))
-        //                     .ReturnsAsync(creator);
+            _notificationRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Notification>()))
+                                        .Returns(Task.CompletedTask);
 
-        //    _notificationRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Notification>()))
-        //                              .Returns(Task.CompletedTask);
+            // Act
+            await _sut.CreateAsync(eventObject, userId, x => x.CreatorId);
 
-        //    // Act
-        //    await _sut.CreateAsync(dinnerInvitation, userId);
+            // Assert
+            _notificationRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Notification>()), Times.Once);
+        }
 
-        //    // Assert
-        //    _notificationRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Notification>()), Times.Once);
-        //}
+        [Theory]
+        [MemberData(nameof(DinnerInvitationTestDataNonExistingCreator))]
+        [MemberData(nameof(PlayDateTestDataNonExistingCreator))]
+        public async Task CreateAsync_CreatorDoesNotExist_ShouldAddNotificationWithUnknownCreator<TEventObject>(TEventObject eventObject, string userId)
+        where TEventObject : BaseEvent
+        {
+            // Arrange
+            _userRepositoryMock.Setup(x => x.GetAsync(eventObject.CreatorId))
+                               .ReturnsAsync(null as ItTakesAVillageUser);
 
-        //[Fact]
-        //public async Task CreateAsync_CreatorDoesNotExist_ShouldAddNotificationWithUnknownCreator()
-        //{
-        //    // Arrange
-        //    var dinnerInvitation = new DinnerInvitation { CreatorId = "nonExistentId" };
-        //    var userId = "testUserId";
+            _notificationRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Notification>()))
+                                        .Returns(Task.CompletedTask);
 
-        //    _userRepositoryMock.Setup(x => x.GetAsync(dinnerInvitation.CreatorId))
-        //                     .ReturnsAsync(null as ItTakesAVillageUser); 
+            // Act
+            await _sut.CreateAsync(eventObject, userId, x => x.CreatorId);
 
-        //    _notificationRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Notification>()))
-        //                              .Returns(Task.CompletedTask);
-        //    // Act
-        //    await _sut.CreateAsync(dinnerInvitation, userId);
-
-        //    // Assert
-        //    _notificationRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Notification>()), Times.Once);
-        //}
+            // Assert
+            _notificationRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Notification>()), Times.Once);
+        }
 
         [Fact]
         public async Task UpdateIsReadAsync_NotificationExists_ShouldUpdateAndCallUpdateAsync()
@@ -140,6 +140,22 @@ namespace ItTakesAVillage.Tests
 
             // Assert
             _notificationRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Notification>()), Times.Never);
+        }
+        public static IEnumerable<object[]> DinnerInvitationTestDataExistingCreator()
+        {
+            yield return new object[] { new DinnerInvitation { CreatorId = "creatorId" }, "testUserId", new ItTakesAVillageUser { Id = "creatorId", FirstName = "John", LastName = "Doe" } };
+        }
+        public static IEnumerable<object[]> PlayDateTestDataExistingCreator()
+        {
+            yield return new object[] { new PlayDate { CreatorId = "creatorId" }, "testUserId", new ItTakesAVillageUser { Id = "creatorId", FirstName = "Jane", LastName = "Doe" } };
+        }
+        public static IEnumerable<object[]> DinnerInvitationTestDataNonExistingCreator()
+        {
+            yield return new object[] { new DinnerInvitation { CreatorId = "testUserId" }, "testUserId" };
+        }
+        public static IEnumerable<object[]> PlayDateTestDataNonExistingCreator()
+        {
+            yield return new object[] { new PlayDate { CreatorId = "testUserId" }, "testUserId" };
         }
     }
 }
