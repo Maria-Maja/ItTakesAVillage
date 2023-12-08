@@ -15,18 +15,19 @@ jobs:
         sudo apt-get install -y jq
       
     - name: Get Joke from API
-    env:
-      JOKE: ${{ runner.token }}
+      env:
+        JOKE: ${{ runner.token }}
       run: |
         export JOKE=$(curl -s "https://api.chucknorris.io/jokes/random" | jq -r '.value')
         echo "JOKE=$JOKE" >> $GITHUB_ENV
         
-        - uses: actions/github-script@v6
-        with:
+    - name: Add Comment
+      uses: actions/github-script@v6
+      with:
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'Dagens skämt: $(echo "$JOKE")'
+              body: 'Dagens skämt: ' + process.env.JOKE
             })
