@@ -10,10 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check if merged to main
-      id: check_merge
-      run: echo "is_merged=${{ github.event.pull_request.merged && github.event.pull_request.base.ref == 'main' }}"
-
     - name: Send Email
       uses: hilarion5/send-mail@v1
       with:
@@ -26,18 +22,3 @@ jobs:
         password: ${{ secrets.SENDER_EMAIL_PASSWORD }}
         subject: Github Merge
         body: Someone has merged a pull request into the main branch. Check it on GitHub.
-        html: |
-          <h1>Hi!</h1>
-          <p>Someone has merged a pull request into the main branch. <br/>
-             Check it on GitHub.com</p>
-
-      
-    #- name: Send Email Notification
-     # if: steps.check_merge.outputs.is_merged == 'true'
-      #uses: dawidd6/action-send-mail@v3
-      #with:
-       # connection_url: ${{ secrets.MAIL_CONNECTION }}
-        #subject: 'Merge to Main Alert'
-        #to: ${{ secrets.RECEIVER_EMAIL_USERNAME }}
-        #from: Luke Skywalker
-        #body: 'Someone has merged a pull request into the main branch. Check it on GitHub.'
