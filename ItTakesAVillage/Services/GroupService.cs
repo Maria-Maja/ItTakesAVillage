@@ -1,5 +1,6 @@
 ﻿using ItTakesAVillage.Contracts;
 using ItTakesAVillage.Data;
+using ItTakesAVillage.Helper;
 using ItTakesAVillage.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +12,7 @@ namespace ItTakesAVillage.Services
         private readonly IRepository<Group> _groupRepository;
         private readonly IRepository<ItTakesAVillageUser> _userRepository;
         private readonly IRepository<UserGroup> _userGroupRepository;
-
+        Validate validate = new Validate();
         public GroupService(IRepository<Group> groupRepository,
             IRepository<ItTakesAVillageUser> userRepository,
             IRepository<UserGroup> userGroupRepository)
@@ -24,8 +25,8 @@ namespace ItTakesAVillage.Services
         public async Task<int> Save(Group group, string userId)
         {
             var groupsByUserId = await GetGroupsByUserId(userId);
-
-            if (groupsByUserId.Any(x => x != null && x.Name == group.Name))
+            var groupNameExists = ExistsWithSimilarName(groupsByUserId, group.Name);
+            if (groupNameExists)
                 return 0;
 
             await _groupRepository.AddAsync(group);
@@ -66,12 +67,11 @@ namespace ItTakesAVillage.Services
 
             return userGroups.Select(x => x.Group).ToList();
         }
+        public bool ExistsWithSimilarName(List<Group?> groups, string name)
+        {
+            var exists = groups.Any(x => x != null && Validate.NormalizeName(x.Name) == Validate.NormalizeName(name));
 
-        //public async Task<List<UserGroup>>GetAllUserGroups()
-        //{
-        //    return await _userGroupRepository.GetAsync<UserGroup>();
-        //}
-
-        
+            return exists;
+        }
     }
 }

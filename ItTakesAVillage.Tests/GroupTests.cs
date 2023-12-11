@@ -16,7 +16,6 @@ namespace ItTakesAVillage.Tests
         private readonly Mock<IRepository<ItTakesAVillageUser>> _userRepositoryMock;
         private readonly Mock<IRepository<Group>> _groupRepositoryMock;
         private readonly GroupService _sut;
-
         public GroupTests()
         {
             _userGroupRepositoryMock = new Mock<IRepository<UserGroup>>();
@@ -27,11 +26,19 @@ namespace ItTakesAVillage.Tests
                                    _userRepositoryMock.Object,
                                    _userGroupRepositoryMock.Object);
         }
-        [Fact]
-        public async Task Save_WhenGroupDoesNotExist_ReturnsGroupId()
+
+        [Theory]
+        [InlineData("TestGroup")]
+        [InlineData("testgroup")]
+        [InlineData("testgroup!")]
+        [InlineData("&testgroup")]
+        [InlineData("1testgroup")]
+        [InlineData("testgroup0")]
+        [InlineData(" Testgroup")]
+        public async Task Save_WhenGroupDoesNotExist_ReturnsGroupId(string expected)
         {
             // Arrange
-            var group = new Group { Id = 1, Name = "TestGroup" };
+            var group = new Group { Id = 1, Name = expected };
             var userId = "testUserId";
 
             _userGroupRepositoryMock.Setup(x => x.GetByFilterAsync(It.IsAny<Expression<Func<UserGroup, bool>>>()))
@@ -40,7 +47,6 @@ namespace ItTakesAVillage.Tests
             _groupRepositoryMock.Setup(x => x.AddAsync(It.IsAny<Group>()))
                               .Callback((Group g) => { g.Id = group.Id; })
                               .Returns(Task.CompletedTask);
-
             // Act
             var actual = await _sut.Save(group, userId);
 
@@ -49,24 +55,29 @@ namespace ItTakesAVillage.Tests
             _groupRepositoryMock.Verify(x => x.AddAsync(It.Is<Group>(g => g.Equals(group))), Times.Once);
         }
 
-        [Fact]
-        public async Task Save_WhenGroupExists_ReturnsZero()
+        [Theory]
+        [InlineData("TestGroup")]
+        [InlineData("testgroup")]
+        [InlineData("testgroup!")]
+        [InlineData("&testgroup")]
+        [InlineData("1testgroup")]
+        [InlineData("testgroup0")]
+        [InlineData(" Testgroup")]
+        public async Task Save_WhenGroupExists_ReturnsZero(string expected)
         {
             // Arrange
-            var existingGroup = new Group { Id = 1, Name = "TestGroup" };
-            var group = new Group { Id = 2, Name = "TestGroup" };
+            var existingGroup = new Group { Id = 1, Name = expected };
+            var group = new Group { Id = 2, Name = expected };
             var userId = "testUserId";
 
             _userGroupRepositoryMock.Setup(x => x.GetByFilterAsync(It.IsAny<Expression<Func<UserGroup, bool>>>()))
                                   .ReturnsAsync(new List<UserGroup> { new UserGroup { UserId = userId, Group = existingGroup } });
-
             // Act
             var actual = await _sut.Save(group, userId);
 
             // Assert
             Assert.Equal(0, actual);
 
-            // Verify that AddAsync was not called
             _groupRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Group>()), Times.Never);
         }
 
@@ -79,7 +90,6 @@ namespace ItTakesAVillage.Tests
             var userGroups = new List<UserGroup>();
 
             _userRepositoryMock.Setup(x => x.GetAsync(userId)).ReturnsAsync(new ItTakesAVillageUser { Id = userId });
-
             _userGroupRepositoryMock.Setup(x => x.GetAsync()).ReturnsAsync(userGroups);
 
             // Act

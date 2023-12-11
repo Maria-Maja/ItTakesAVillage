@@ -15,7 +15,7 @@ namespace ItTakesAVillage.Services
 
         public async Task<bool> Create(PlayDate playDate)
         {
-            if (playDate.DateTime.Date < DateTime.Now)
+            if (playDate.DateTime.Date < DateTime.Now.Date)
                 return false;
             await _playDateRepository.AddAsync(playDate);
             return true;
