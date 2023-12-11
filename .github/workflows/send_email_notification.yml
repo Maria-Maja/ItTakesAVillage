@@ -1,10 +1,9 @@
 name: Send Email Notification
 
 on:
-  pull_request:
-    types:
-      - closed
-
+  push:
+    branches:
+    - main
 jobs:
   send-email-notification:
     runs-on: ubuntu-latest
