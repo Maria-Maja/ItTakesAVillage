@@ -19,7 +19,7 @@ namespace ItTakesAVillage.Services
         }
         public async Task<bool> Create(DinnerInvitation invitation)
         {
-            if (invitation.DateTime.Date < DateTime.Now)
+            if (invitation.DateTime.Date < DateTime.Now.Date)
                 return false;
 
             await _dinnerInvitationRepository.AddAsync(invitation);

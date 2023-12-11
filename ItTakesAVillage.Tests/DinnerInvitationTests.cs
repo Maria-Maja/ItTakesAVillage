@@ -11,22 +11,24 @@ using System.Threading.Tasks;
 
 namespace ItTakesAVillage.Tests
 {
-    public class BaseEventTests
+    public class DinnerInvitationTests
     {
         private readonly Mock<IRepository<DinnerInvitation>> _dinnerInvitationRepositoryMock;
         private readonly DinnerInvitationService _sut;
-
-        public BaseEventTests()
+        public DinnerInvitationTests()
         {
             _dinnerInvitationRepositoryMock = new Mock<IRepository<DinnerInvitation>>();
-
             _sut = new DinnerInvitationService(_dinnerInvitationRepositoryMock.Object);
         }
-        [Fact]
-        public async Task Create_InvitationInFuture_ShouldReturnTrue()
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(100)]
+        public async Task Create_InvitationInFuture_ShouldReturnTrue(int days)
         {
             // Arrange
-            var futureDate = DateTime.Now.AddDays(1);
+            var futureDate = DateTime.Now.AddDays(days);
             var dinnerInvitation = new DinnerInvitation { DateTime = futureDate };
 
             _dinnerInvitationRepositoryMock.Setup(x => x.AddAsync(It.IsAny<DinnerInvitation>()))
@@ -40,11 +42,13 @@ namespace ItTakesAVillage.Tests
             _dinnerInvitationRepositoryMock.Verify(x => x.AddAsync(It.IsAny<DinnerInvitation>()), Times.Once);
         }
 
-        [Fact]
-        public async Task Create_InvitationInPast_ShouldReturnFalse()
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(-100)]
+        public async Task Create_InvitationInPast_ShouldReturnFalse(int days)
         {
             // Arrange
-            var pastDate = DateTime.Now.AddDays(-1);
+            var pastDate = DateTime.Now.AddDays(days);
             var dinnerInvitation = new DinnerInvitation { DateTime = pastDate };
 
             // Act
