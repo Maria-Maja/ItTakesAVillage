@@ -12,7 +12,6 @@ namespace ItTakesAVillage.Services
         private readonly IRepository<Group> _groupRepository;
         private readonly IRepository<ItTakesAVillageUser> _userRepository;
         private readonly IRepository<UserGroup> _userGroupRepository;
-        Validate validate = new Validate();
         public GroupService(IRepository<Group> groupRepository,
             IRepository<ItTakesAVillageUser> userRepository,
             IRepository<UserGroup> userGroupRepository)

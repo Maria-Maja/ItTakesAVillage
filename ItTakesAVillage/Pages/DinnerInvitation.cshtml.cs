@@ -13,7 +13,6 @@ namespace ItTakesAVillage.Pages
     public class DinnerInvitationModel : PageModel
     {
         private readonly UserManager<ItTakesAVillageUser> _userManager;
-        //private readonly IDinnerInvitationService _dinnerInvitationService;
         private readonly IEventService<DinnerInvitation> _dinnerInvitationService;
         private readonly INotificationService _notificationService;
         private readonly IGroupService _groupService;
@@ -23,8 +22,6 @@ namespace ItTakesAVillage.Pages
         public ItTakesAVillageUser? CurrentUser { get; set; }
         public List<Models.Group?> GroupsOfCurrentUser { get; set; } = new List<Group?>();
         public List<Notification> Notifications { get; set; } = new();
-
-
 
         public DinnerInvitationModel(IEventService<DinnerInvitation> dinnerInvitationService,
             UserManager<ItTakesAVillageUser> userManager,
@@ -36,7 +33,6 @@ namespace ItTakesAVillage.Pages
             _notificationService = notificationService;
             _groupService = groupService;
         }
-
         public async Task<IActionResult> OnGet()
         {
             CurrentUser = await _userManager.GetUserAsync(User);
@@ -50,7 +46,6 @@ namespace ItTakesAVillage.Pages
 
             return Page();
         }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
