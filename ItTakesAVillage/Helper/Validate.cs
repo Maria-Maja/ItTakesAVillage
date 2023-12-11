@@ -3,7 +3,7 @@ using ItTakesAVillage.Models;
 
 namespace ItTakesAVillage.Helper
 {
-    public class Validate
+    public static class Validate
     {
         public static string NormalizeName(string name)
         {
