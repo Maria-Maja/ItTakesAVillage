@@ -1,21 +1,19 @@
 ﻿function handleAccordionClick(notificationId) {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open("POST", "/Notification?handler=HandleAccordionClick", true);
     xhr.setRequestHeader("Content-Type", "application/json");
 
-    var antiForgeryToken = document.getElementsByName("__RequestVerificationToken")[0].value;
+    let antiForgeryToken = document.getElementsByName("__RequestVerificationToken")[0].value;
     xhr.setRequestHeader("RequestVerificationToken", antiForgeryToken);
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
+                let response = JSON.parse(xhr.responseText);
                 if (response.success) {
 
-                    var accordionButton = document.querySelector(`button[data-bs-target="#collapse_${notificationId}"]`);
-                    //var accordionElement = document.getElementById("collapse_" + notificationId);
+                    let accordionButton = document.querySelector(`button[data-bs-target="#collapse_${notificationId}"]`);
 
-                    accordionButton.classList.remove("fw-bold"); 
-                    //accordionElement.innerHTML = "Uppdaterat innehåll"; 
+                    accordionButton.classList.remove("fw-bold");
 
                     updateNotificationLink(response.unreadCount);
                 } else {
@@ -27,12 +25,12 @@
         }
     };
 
-    var data = JSON.stringify(notificationId);
+    let data = JSON.stringify(notificationId);
     xhr.send(data);
 }
 
 function updateNotificationLink(unreadCount) {
-    var notificationLink = document.getElementById("notification-link");
+    let notificationLink = document.getElementById("notification-link");
     if (notificationLink) {
         notificationLink.innerHTML = `
             <i class="bi bi-bell"></i>
@@ -42,21 +40,20 @@ function updateNotificationLink(unreadCount) {
 }
 
 //#region TooltipFunction
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
 })
 //#endregion
 
 //#region ValidateSelectList    
     function validateSelection() {
-        var selectedValue1 = document.getElementById("selectList1").value;
-        var selectedValue2 = document.getElementById("selectList2").value;
+        let selectedValue1 = document.getElementById("selectList1").value;
+        let selectedValue2 = document.getElementById("selectList2").value;
 
         if (selectedValue1 === "" || selectedValue2 === "") {
             alert("Vänligen välj ett alternativ från varje lista.");
         } else {
-
             document.forms[0].submit();
         }
     }
