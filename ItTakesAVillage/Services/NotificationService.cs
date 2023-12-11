@@ -27,9 +27,9 @@ namespace ItTakesAVillage.Services
             => await _notificationRepository.GetByFilterAsync(x => x.UserId == userId && x.RelatedEvent.DateTime.Date >= DateTime.Now.Date);
         public async Task<int> CountAsync(string userId)
         {
-            var result = await _notificationRepository.GetByFilterAsync(x => x.UserId == userId && x.IsRead == false);
+            var result = await _notificationRepository.GetByFilterAsync(x => x.UserId == userId && !x.IsRead);
 
-            return result.Count();
+            return result.Count;
         }
         public async Task NotifyGroupAsync<TEvent>(TEvent invitation) where TEvent : BaseEvent
         {
@@ -57,7 +57,6 @@ namespace ItTakesAVillage.Services
                 await _notificationRepository.UpdateAsync(existingNotification);
             }
         }
-
         public async Task CreateAsync<TEvent>(TEvent invitation, string userId, Func<TEvent, string> creatorIdFunc) where TEvent : BaseEvent
         {
             var creatorId = creatorIdFunc(invitation);
