@@ -81,7 +81,7 @@ namespace ItTakesAVillage.Services
 
             await _notificationRepository.AddAsync(newNotification);
         }
-        private Func<TEvent, string> GetCreatorIdFunction<TEvent>() where TEvent : BaseEvent
+        private static Func<TEvent, string> GetCreatorId<TEvent>() where TEvent : BaseEvent
         {
             if (typeof(TEvent) == typeof(DinnerInvitation))
             {

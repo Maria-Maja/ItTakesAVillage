@@ -5,8 +5,9 @@ namespace ItTakesAVillage.Pages
 {
     public class ToolPoolModel : PageModel
     {
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            return Page();
         }
     }
 }

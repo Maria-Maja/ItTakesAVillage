@@ -41,7 +41,7 @@ namespace ItTakesAVillage.Services
             if (user == null)
                 return false;
 
-            bool userExistsInList = usergroups.Any(x => x.UserId == user.Id && x.GroupId == groupId);
+            bool userExistsInList = usergroups.Exists(x => x.UserId == user.Id && x.GroupId == groupId);
             if (userExistsInList)
                 return false;
 
@@ -69,7 +69,7 @@ namespace ItTakesAVillage.Services
         }
         public bool ExistsWithSimilarName(List<Group?> groups, string name)
         {
-            var exists = groups.Any(x => x != null && Validate.NormalizeName(x.Name) == Validate.NormalizeName(name));
+            var exists = groups.Exists(x => x != null && Validate.NormalizeName(x.Name) == Validate.NormalizeName(name));
 
             return exists;
         }
