@@ -41,7 +41,7 @@ namespace ItTakesAVillage.Services
                 {
                     if (member != null)
                     {
-                        await CreateAsync(invitation, member.Id, GetCreatorIdFunction<TEvent>());
+                        await CreateAsync(invitation, member.Id, GetCreatorId<TEvent>());
                     }
                 }
             }
