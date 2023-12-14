@@ -15,16 +15,16 @@ using ItTakesAVillage.Models;
 
 namespace ItTakesAVillage.Areas.Identity.Pages.Account
 {
-    public class LoginWith2faModel : PageModel
+    public class LoginWith2fAModel : PageModel
     {
         private readonly SignInManager<ItTakesAVillageUser> _signInManager;
         private readonly UserManager<ItTakesAVillageUser> _userManager;
-        private readonly ILogger<LoginWith2faModel> _logger;
+        private readonly ILogger<LoginWith2fAModel> _logger;
 
-        public LoginWith2faModel(
+        public LoginWith2fAModel(
             SignInManager<ItTakesAVillageUser> signInManager,
             UserManager<ItTakesAVillageUser> userManager,
-            ILogger<LoginWith2faModel> logger)
+            ILogger<LoginWith2fAModel> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -109,7 +109,7 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account
 
             var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, Input.RememberMachine);
 
-            var userId = await _userManager.GetUserIdAsync(user);
+            await _userManager.GetUserIdAsync(user);
 
             if (result.Succeeded)
             {

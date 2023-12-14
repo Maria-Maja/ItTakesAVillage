@@ -10,13 +10,13 @@ namespace ItTakesAVillage.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
+            // comment explaining why the method is empty
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            // comment explaining why the method is empty
         }
     }
 }

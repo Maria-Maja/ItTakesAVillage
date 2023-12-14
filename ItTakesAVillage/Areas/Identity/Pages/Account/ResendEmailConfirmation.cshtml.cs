@@ -53,6 +53,7 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account
 
         public void OnGet()
         {
+            // comment explaining why the method is empty
         }
 
         public async Task<IActionResult> OnPostAsync()

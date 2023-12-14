@@ -19,16 +19,13 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account.Manage
     public class EmailModel : PageModel
     {
         private readonly UserManager<ItTakesAVillageUser> _userManager;
-        private readonly SignInManager<ItTakesAVillageUser> _signInManager;
         private readonly IEmailSender _emailSender;
 
         public EmailModel(
             UserManager<ItTakesAVillageUser> userManager,
-            SignInManager<ItTakesAVillageUser> signInManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _emailSender = emailSender;
         }
 

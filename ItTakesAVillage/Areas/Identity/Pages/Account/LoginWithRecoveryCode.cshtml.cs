@@ -90,7 +90,7 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account
 
             var result = await _signInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
 
-            var userId = await _userManager.GetUserIdAsync(user);
+            await _userManager.GetUserIdAsync(user);
 
             if (result.Succeeded)
             {
