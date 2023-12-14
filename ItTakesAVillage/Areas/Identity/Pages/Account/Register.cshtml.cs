@@ -126,7 +126,7 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account
                     UserName = Input.Email,
                     Email = Input.Email,
                     FirstName = Input.FirstName,
-                    LastName = Input.LastName,
+                    LastName = Input.LastName
                 };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -167,20 +167,6 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
-        }
-
-        private ItTakesAVillageUser CreateUser()
-        {
-            try
-            {
-                return Activator.CreateInstance<ItTakesAVillageUser>();
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(ItTakesAVillageUser)}'. " +
-                    $"Ensure that '{nameof(ItTakesAVillageUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
-            }
         }
 
         private IUserEmailStore<ItTakesAVillageUser> GetEmailStore()

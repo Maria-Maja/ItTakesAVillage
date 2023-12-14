@@ -13,14 +13,11 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account.Manage
     public class PersonalDataModel : PageModel
     {
         private readonly UserManager<ItTakesAVillageUser> _userManager;
-        private readonly ILogger<PersonalDataModel> _logger;
 
         public PersonalDataModel(
-            UserManager<ItTakesAVillageUser> userManager,
-            ILogger<PersonalDataModel> logger)
+            UserManager<ItTakesAVillageUser> userManager)
         {
             _userManager = userManager;
-            _logger = logger;
         }
 
         public async Task<IActionResult> OnGet()

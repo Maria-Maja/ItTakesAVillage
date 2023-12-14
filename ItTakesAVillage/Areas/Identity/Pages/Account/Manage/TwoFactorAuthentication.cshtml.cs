@@ -16,14 +16,11 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ItTakesAVillageUser> _userManager;
         private readonly SignInManager<ItTakesAVillageUser> _signInManager;
-        private readonly ILogger<TwoFactorAuthenticationModel> _logger;
-
         public TwoFactorAuthenticationModel(
-            UserManager<ItTakesAVillageUser> userManager, SignInManager<ItTakesAVillageUser> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
+            UserManager<ItTakesAVillageUser> userManager, SignInManager<ItTakesAVillageUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _logger = logger;
         }
 
         /// <summary>

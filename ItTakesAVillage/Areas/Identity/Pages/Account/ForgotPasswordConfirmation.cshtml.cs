@@ -20,6 +20,7 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account
         /// </summary>
         public void OnGet()
         {
+            // comment explaining why the method is empty
         }
     }
 }
