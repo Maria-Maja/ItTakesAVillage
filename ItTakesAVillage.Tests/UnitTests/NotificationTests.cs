@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ItTakesAVillage.Tests
+namespace ItTakesAVillage.Tests.UnitTests
 {
     public class NotificationTests
     {
