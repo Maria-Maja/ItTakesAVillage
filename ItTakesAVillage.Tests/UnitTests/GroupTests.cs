@@ -8,7 +8,7 @@ using Moq;
 using System.Linq.Expressions;
 using System.Reflection.Metadata;
 
-namespace ItTakesAVillage.Tests
+namespace ItTakesAVillage.Tests.UnitTests
 {
     public class GroupTests
     {

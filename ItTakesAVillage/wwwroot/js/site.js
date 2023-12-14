@@ -1,4 +1,5 @@
-﻿function handleAccordionClick(notificationId) {
+﻿//#region handeAccordionFunction
+function handleAccordionClick(notificationId) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "/Notification?handler=HandleAccordionClick", true);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -28,7 +29,9 @@
     let data = JSON.stringify(notificationId);
     xhr.send(data);
 }
+//#endregion
 
+//#region UpdateNotificationCount
 function updateNotificationLink(unreadCount) {
     let notificationLink = document.getElementById("notification-link");
     if (notificationLink) {
@@ -38,6 +41,7 @@ function updateNotificationLink(unreadCount) {
         `;
     }
 }
+//#endregion
 
 //#region TooltipFunction
 let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
