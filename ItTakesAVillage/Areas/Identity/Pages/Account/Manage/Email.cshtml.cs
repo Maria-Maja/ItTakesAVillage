@@ -21,6 +21,7 @@ namespace ItTakesAVillage.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ItTakesAVillageUser> _userManager;
         private readonly IEmailSender _emailSender;
 
+
         public EmailModel(
             UserManager<ItTakesAVillageUser> userManager,
             IEmailSender emailSender)
